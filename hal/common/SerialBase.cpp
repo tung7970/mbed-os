@@ -21,15 +21,16 @@
 
 namespace mbed {
 
-SerialBase::SerialBase(PinName tx, PinName rx) :
+SerialBase::SerialBase(PinName tx, PinName rx, int baud) :
 #if DEVICE_SERIAL_ASYNCH
                                                  _thunk_irq(this), _tx_usage(DMA_USAGE_NEVER),
                                                  _rx_usage(DMA_USAGE_NEVER),
 #endif
-                                                _serial(), _baud(9600) {
+                                                _serial(), _baud(baud) {
     // No lock needed in the constructor
 
     serial_init(&_serial, tx, rx);
+    serial_baud(&_serial, _baud);
     serial_irq_handler(&_serial, SerialBase::_irq_handler, (uint32_t)this);
 }
 

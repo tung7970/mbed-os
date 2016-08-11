@@ -215,7 +215,7 @@ protected:
 #endif
 
 protected:
-    SerialBase(PinName tx, PinName rx);
+    SerialBase(PinName tx, PinName rx, int baud);
     virtual ~SerialBase() {
     }
 
