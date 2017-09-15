@@ -65,7 +65,7 @@ void rtc_write(time_t t)
     // Set the RTC
     rtc_time = t;
 
-    gtimer_start(&sw_rtc);    
+    gtimer_start(&sw_rtc);
 }
 
 #endif  // endof "#if DEVICE_RTC"

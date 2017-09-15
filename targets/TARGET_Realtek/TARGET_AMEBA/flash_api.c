@@ -18,21 +18,18 @@
 int32_t flash_init(flash_t *obj)
 {
     __flash_ext_turnon();
-
     return 0;
 }
 
 int32_t flash_free(flash_t *obj)
 {
     __flash_ext_turnoff();
-
     return 0;
 }
 
 int32_t flash_erase_sector(flash_t *obj, uint32_t address)
 {
     flash_ext_erase_sector(obj, address);
-
     return 0;
 }
 
@@ -68,4 +65,3 @@ uint32_t flash_get_size(const flash_t *obj)
 {
     return FLASH_SIZE;
 }
-

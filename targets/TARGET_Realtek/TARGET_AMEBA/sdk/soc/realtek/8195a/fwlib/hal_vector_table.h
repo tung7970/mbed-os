@@ -16,40 +16,17 @@
 #ifndef _HAL_VECTOR_TABLE_H_
 #define _HAL_VECTOR_TABLE_H_
 
-extern _LONG_CALL_ROM_ VOID
-VectorTableInitRtl8195A(
-    IN  u32 StackP
+extern _LONG_CALL_ROM_ void VectorTableInitRtl8195A(u32 StackP);
+extern _LONG_CALL_ROM_ void VectorTableInitForOSRtl8195A(
+    void *PortSVC,
+    void *PortPendSVH,
+    void *PortSysTick
 );
 
-extern _LONG_CALL_ROM_ VOID
-VectorTableInitForOSRtl8195A(
-    IN  VOID *PortSVC,
-    IN  VOID *PortPendSVH,
-    IN  VOID *PortSysTick
-);
-
-extern _LONG_CALL_ROM_ BOOL
-VectorIrqRegisterRtl8195A(
-    IN  PIRQ_HANDLE pIrqHandle
-);
-
-extern _LONG_CALL_ROM_ BOOL
-VectorIrqUnRegisterRtl8195A(
-    IN  PIRQ_HANDLE pIrqHandle
-);
-
-extern _LONG_CALL_ROM_ VOID
-VectorIrqEnRtl8195A(
-    IN  PIRQ_HANDLE pIrqHandle
-);
-
-extern _LONG_CALL_ROM_ VOID
-VectorIrqDisRtl8195A(
-    IN  PIRQ_HANDLE pIrqHandle
-);
-
-extern _LONG_CALL_ROM_ VOID
-HalPeripheralIntrHandle(VOID);
+extern _LONG_CALL_ROM_ BOOL VectorIrqRegisterRtl8195A(PIRQ_HANDLE pIrqHandle);
+extern _LONG_CALL_ROM_ BOOL VectorIrqUnRegisterRtl8195A(PIRQ_HANDLE pIrqHandle);
+extern _LONG_CALL_ROM_ void VectorIrqEnRtl8195A(PIRQ_HANDLE pIrqHandle);
+extern _LONG_CALL_ROM_ void VectorIrqDisRtl8195A(PIRQ_HANDLE pIrqHandle);
+extern _LONG_CALL_ROM_ void HalPeripheralIntrHandle(void);
 
 #endif //_HAL_VECTOR_TABLE_H_
-

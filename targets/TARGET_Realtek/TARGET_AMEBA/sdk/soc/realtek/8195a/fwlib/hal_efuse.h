@@ -15,13 +15,12 @@
 #ifndef _HAL_EFUSE_H_
 #define _HAL_EFUSE_H_
 
-_LONG_CALL_ROM_ extern VOID HalEFUSEPowerSwitch8195AROM(IN u8 bWrite, IN u8 PwrState, IN u8 L25OutVoltage);
-extern u32 HALEFUSEOneByteReadRAM(IN	u32 CtrlSetting, IN	u16 Addr, OUT u8 *Data, IN u8 L25OutVoltage);
-extern u32 HALEFUSEOneByteWriteRAM(IN	u32 CtrlSetting, IN	u16 Addr, IN u8 Data, IN u8 L25OutVoltage);
+extern _LONG_CALL_ROM_ void HalEFUSEPowerSwitch8195AROM(u8 bWrite, u8 PwrState, u8 L25OutVoltage);
+extern u32 HALEFUSEOneByteReadRAM(u32 CtrlSetting, u16 Addr, u8 *Data, u8 L25OutVoltage);
+extern u32 HALEFUSEOneByteWriteRAM(u32 CtrlSetting, u16 Addr, u8 Data, u8 L25OutVoltage);
 
 #define EFUSERead8     HALEFUSEOneByteReadRAM
 #define EFUSEWrite8    HALEFUSEOneByteWriteRAM
 
-#define L25EOUTVOLTAGE	7
+#define L25EOUTVOLTAGE    7
 #endif
-

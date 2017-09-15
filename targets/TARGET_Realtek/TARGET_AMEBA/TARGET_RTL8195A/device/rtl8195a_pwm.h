@@ -13,55 +13,24 @@
  *******************************************************************************
  */
 
-
 #ifndef _RTL8195A_PWM_H_
 #define _RTL8195A_PWM_H_
 
-extern void
-HAL_Pwm_SetDuty_8195a(
-    HAL_PWM_ADAPTER *pPwmAdapt,
-    u32 period,
-    u32 pulse_width
-);
-
-extern HAL_Status 
-HAL_Pwm_Init_8195a(
-    HAL_PWM_ADAPTER *pPwmAdapt
-);
-
-extern void 
-HAL_Pwm_Enable_8195a(
-    HAL_PWM_ADAPTER *pPwmAdapt
-);
-
-extern void 
-HAL_Pwm_Disable_8195a(
-    HAL_PWM_ADAPTER *pPwmAdapt
-);
-
+extern void HAL_Pwm_SetDuty_8195a( HAL_PWM_ADAPTER *pPwmAdapt, u32 period, u32 pulse_width);
+extern HAL_Status HAL_Pwm_Init_8195a( HAL_PWM_ADAPTER *pPwmAdapt);
+extern void HAL_Pwm_Enable_8195a( HAL_PWM_ADAPTER *pPwmAdapt);
+extern void HAL_Pwm_Disable_8195a( HAL_PWM_ADAPTER *pPwmAdapt);
 
 #ifdef CONFIG_CHIP_E_CUT
-extern _LONG_CALL_ void
-HAL_Pwm_SetDuty_8195a_V04(
+extern _LONG_CALL_ void HAL_Pwm_SetDuty_8195a_V04(
     HAL_PWM_ADAPTER *pPwmAdapt,
     u32 period,
     u32 pulse_width
 );
 
-extern _LONG_CALL_ HAL_Status 
-HAL_Pwm_Init_8195a_V04(
-    HAL_PWM_ADAPTER *pPwmAdapt
-);
-
-extern _LONG_CALL_ void 
-HAL_Pwm_Enable_8195a_V04(
-    HAL_PWM_ADAPTER *pPwmAdapt
-);
-
-extern _LONG_CALL_ void 
-HAL_Pwm_Disable_8195a_V04(
-    HAL_PWM_ADAPTER *pPwmAdapt
-);
+extern _LONG_CALL_ HAL_Status HAL_Pwm_Init_8195a_V04(HAL_PWM_ADAPTER *pPwmAdapt);
+extern _LONG_CALL_ void HAL_Pwm_Enable_8195a_V04(HAL_PWM_ADAPTER *pPwmAdapt);
+extern _LONG_CALL_ void HAL_Pwm_Disable_8195a_V04(HAL_PWM_ADAPTER *pPwmAdapt);
 #endif
 
 #endif

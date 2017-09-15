@@ -76,7 +76,7 @@ log_uart_t stdio_uart_log;
 static void SerialTxDoneCallBack(VOID *pAdapter);
 static void SerialRxDoneCallBack(VOID *pAdapter);
 
-void serial_init(serial_t *obj, PinName tx, PinName rx) 
+void serial_init(serial_t *obj, PinName tx, PinName rx)
 {
     uint32_t uart_tx, uart_rx;
     uint32_t uart_sel;
@@ -98,8 +98,8 @@ void serial_init(serial_t *obj, PinName tx, PinName rx)
         DBG_UART_ERR("%s: Cannot find matched UART\n", __FUNCTION__);
         return;
     }
-#ifdef CONFIG_MBED_ENABLED 
-    else if(uart_idx == UART_3){
+#ifdef CONFIG_MBED_ENABLED
+    else if (uart_idx == UART_3) {
         obj->index = UART_3;
         goto init_stdio;
     }
@@ -112,7 +112,7 @@ void serial_init(serial_t *obj, PinName tx, PinName rx)
         DBG_UART_ERR("%s: Allocate Adapter Failed\n", __FUNCTION__);
         return;
     }
-    
+
     HalRuartOpInit((VOID*)pHalRuartOp);
 
 #ifdef CONFIG_GDMA_EN
@@ -133,12 +133,12 @@ void serial_init(serial_t *obj, PinName tx, PinName rx)
     pHalRuartAdapter->PinmuxSelect = RTL_GET_PERI_SEL(uart_sel);
     pHalRuartAdapter->BaudRate = 9600;
     pHalRuartAdapter->IrqHandle.Priority = 6;
-    
+
     if (HalRuartInit(pHalRuartAdapter) != HAL_OK) {
         DBG_UART_ERR("serial_init Err!\n");
         return;
     }
-    pHalRuartOp->HalRuartRegIrq(pHalRuartAdapter);    
+    pHalRuartOp->HalRuartRegIrq(pHalRuartAdapter);
     pHalRuartOp->HalRuartIntEnable(pHalRuartAdapter);
 
 #ifdef CONFIG_MBED_ENABLED
@@ -154,7 +154,7 @@ init_stdio:
 #endif
 }
 
-void serial_free(serial_t *obj) 
+void serial_free(serial_t *obj)
 {
     PHAL_RUART_ADAPTER pHalRuartAdapter;
 #ifdef CONFIG_GDMA_EN
@@ -162,11 +162,11 @@ void serial_free(serial_t *obj)
     PUART_DMA_CONFIG   pHalRuartDmaCfg;
 #endif
 #ifdef CONFIG_MBED_ENABLED
-    if(obj->index == UART_3){
+    if (obj->index == UART_3) {
         log_uart_free(&stdio_uart_log);
         return;
     }
-#endif 
+#endif
     pHalRuartAdapter = &(obj->hal_uart_adp);
 
     HalRuartDeInit(pHalRuartAdapter);
@@ -182,14 +182,14 @@ void serial_free(serial_t *obj)
     if (serial_dma_en[uart_idx] & SERIAL_TX_DMA_EN) {
         HalRuartTxGdmaDeInit(pHalRuartDmaCfg);
         serial_dma_en[uart_idx] &= ~SERIAL_TX_DMA_EN;
-    }    
+    }
 #endif
 }
 
 void serial_baud(serial_t *obj, int baudrate)
 {
 #ifdef CONFIG_MBED_ENABLED
-    if(obj->index == UART_3){
+    if (obj->index == UART_3) {
         return;
     }
 #endif
@@ -201,17 +201,17 @@ void serial_baud(serial_t *obj, int baudrate)
     HalRuartSetBaudRate((VOID*)pHalRuartAdapter);
 }
 
-void serial_format(serial_t *obj, int data_bits, SerialParity parity, int stop_bits) 
+void serial_format(serial_t *obj, int data_bits, SerialParity parity, int stop_bits)
 {
 #ifdef CONFIG_MBED_ENABLED
-    if(obj->index == UART_3){
+    if (obj->index == UART_3) {
         log_uart_format(&stdio_uart_log, data_bits, parity, stop_bits);
         return;
     }
 #endif
     PHAL_RUART_ADAPTER pHalRuartAdapter;
     pHalRuartAdapter = &(obj->hal_uart_adp);
-    
+
     if (data_bits == 8) {
         pHalRuartAdapter->WordLen = RUART_WLS_8BITS;
     } else {
@@ -265,31 +265,31 @@ static void SerialRxDoneCallBack(VOID *pAdapter)
 {
     PHAL_RUART_ADAPTER pHalRuartAdapter = pAdapter;
     u8 uart_idx = pHalRuartAdapter->UartIndex;
-    
+
     if (irq_handler[uart_idx] != NULL) {
         irq_handler[uart_idx](serial_irq_ids[uart_idx], RxIrq);
     }
 }
 
-void serial_irq_handler(serial_t *obj, uart_irq_handler handler, uint32_t id) 
+void serial_irq_handler(serial_t *obj, uart_irq_handler handler, uint32_t id)
 {
     PHAL_RUART_ADAPTER pHalRuartAdapter;
     u8 uart_idx;
 
-    pHalRuartAdapter = &(obj->hal_uart_adp);    
+    pHalRuartAdapter = &(obj->hal_uart_adp);
     uart_idx = pHalRuartAdapter->UartIndex;
-    
+
     irq_handler[uart_idx] = handler;
-    serial_irq_ids[uart_idx] = id;        
+    serial_irq_ids[uart_idx] = id;
 
     pHalRuartAdapter->TxTDCallback = SerialTxDoneCallBack;
     pHalRuartAdapter->TxTDCbPara = (void*)pHalRuartAdapter;
     pHalRuartAdapter->RxDRCallback = SerialRxDoneCallBack;
-    pHalRuartAdapter->RxDRCbPara = (void*)pHalRuartAdapter;    
+    pHalRuartAdapter->RxDRCbPara = (void*)pHalRuartAdapter;
 }
 
 
-void serial_irq_set(serial_t *obj, SerialIrq irq, uint32_t enable) 
+void serial_irq_set(serial_t *obj, SerialIrq irq, uint32_t enable)
 {
     PHAL_RUART_ADAPTER pHalRuartAdapter;
     PHAL_RUART_OP pHalRuartOp;
@@ -298,7 +298,7 @@ void serial_irq_set(serial_t *obj, SerialIrq irq, uint32_t enable)
     pHalRuartAdapter = &(obj->hal_uart_adp);
     pHalRuartOp = &(obj->hal_uart_op);
     uart_idx = pHalRuartAdapter->UartIndex;
-    
+
     if (enable) {
         if (irq == RxIrq) {
             pHalRuartAdapter->Interrupts |= RUART_IER_ERBI | RUART_IER_ELSI;
@@ -329,10 +329,10 @@ void serial_irq_set(serial_t *obj, SerialIrq irq, uint32_t enable)
  * READ/WRITE
  ******************************************************************************/
 
-int serial_getc(serial_t *obj) 
+int serial_getc(serial_t *obj)
 {
 #ifdef CONFIG_MBED_ENABLED
-    if(obj->index == UART_3){
+    if (obj->index == UART_3) {
         return log_uart_getc(&stdio_uart_log);
     }
 #endif
@@ -343,17 +343,17 @@ int serial_getc(serial_t *obj)
     return (int)((HAL_RUART_READ32(uart_idx, RUART_REV_BUF_REG_OFF)) & 0xFF);
 }
 
-void serial_putc(serial_t *obj, int c) 
+void serial_putc(serial_t *obj, int c)
 {
 #ifdef CONFIG_MBED_ENABLED
-    if(obj->index == UART_3){
+    if (obj->index == UART_3) {
         log_uart_putc(&stdio_uart_log, (char)c);
         return;
     }
 #endif
     PHAL_RUART_ADAPTER pHalRuartAdapter=(PHAL_RUART_ADAPTER)&(obj->hal_uart_adp);
     u8  uart_idx = pHalRuartAdapter->UartIndex;
-    
+
     while (!serial_writable(obj));
     HAL_RUART_WRITE32(uart_idx, RUART_TRAN_HOLD_REG_OFF, (c & 0xFF));
 
@@ -364,10 +364,10 @@ void serial_putc(serial_t *obj, int c)
     }
 }
 
-int serial_readable(serial_t *obj) 
+int serial_readable(serial_t *obj)
 {
 #ifdef CONFIG_MBED_ENABLED
-    if(obj->index == UART_3){
+    if (obj->index == UART_3) {
         return log_uart_readable(&stdio_uart_log);
     }
 #endif
@@ -382,10 +382,10 @@ int serial_readable(serial_t *obj)
     }
 }
 
-int serial_writable(serial_t *obj) 
+int serial_writable(serial_t *obj)
 {
 #ifdef CONFIG_MBED_ENABLED
-    if(obj->index == UART_3){
+    if (obj->index == UART_3) {
         return log_uart_writable(&stdio_uart_log);
     }
 #endif
@@ -393,7 +393,7 @@ int serial_writable(serial_t *obj)
     PHAL_RUART_ADAPTER pHalRuartAdapter=(PHAL_RUART_ADAPTER)&(obj->hal_uart_adp);
     u8  uart_idx = pHalRuartAdapter->UartIndex;
 
-    if (HAL_RUART_READ32(uart_idx, RUART_LINE_STATUS_REG_OFF) & 
+    if (HAL_RUART_READ32(uart_idx, RUART_LINE_STATUS_REG_OFF) &
                         (RUART_LINE_STATUS_REG_THRE)) {
        return 1;
     } else {
@@ -401,10 +401,10 @@ int serial_writable(serial_t *obj)
     }
 }
 
-void serial_clear(serial_t *obj) 
+void serial_clear(serial_t *obj)
 {
 #ifdef CONFIG_MBED_ENABLED
-    if(obj->index == UART_3){
+    if (obj->index == UART_3) {
         log_uart_clear(&stdio_uart_log);
         return;
     }
@@ -416,10 +416,10 @@ void serial_clear(serial_t *obj)
     HalRuartResetTRxFifo((VOID *)pHalRuartAdapter);
 }
 
-void serial_break_set(serial_t *obj) 
+void serial_break_set(serial_t *obj)
 {
 #ifdef CONFIG_MBED_ENABLED
-    if(obj->index == UART_3){
+    if (obj->index == UART_3) {
         log_uart_break_set(&stdio_uart_log);
         return;
     }
@@ -434,10 +434,10 @@ void serial_break_set(serial_t *obj)
     HAL_RUART_WRITE32(uart_idx, RUART_LINE_CTL_REG_OFF, RegValue);
 }
 
-void serial_break_clear(serial_t *obj) 
+void serial_break_clear(serial_t *obj)
 {
 #ifdef CONFIG_MBED_ENABLED
-    if(obj->index == UART_3){
+    if (obj->index == UART_3) {
         log_uart_break_clear(&stdio_uart_log);
         return;
     }
@@ -452,13 +452,13 @@ void serial_break_clear(serial_t *obj)
     HAL_RUART_WRITE32(uart_idx, RUART_LINE_CTL_REG_OFF, RegValue);
 }
 
-void serial_pinout_tx(PinName tx) 
+void serial_pinout_tx(PinName tx)
 {
     pinmap_pinout(tx, PinMap_UART_TX);
 }
 
 
-#if DEVICE_SERIAL_ASYNCH 
+#if DEVICE_SERIAL_ASYNCH
 #endif
 #endif  //#if CONFIG_UART_EN
 

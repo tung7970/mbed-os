@@ -58,9 +58,9 @@ const u8 Default_Port_PinDef[GPIO_PORT_NUM][GPIO_PORT_WIDTH+1] = {
      PI_7, PJ_0, PJ_1, PJ_2,
      PJ_3, PJ_4, PJ_5, PJ_6,
      PK_0, PK_1, PK_2, PK_3,
-     PK_4, PK_5, PK_6, 
+     PK_4, PK_5, PK_6,
      0xFF}
-     
+
 };
 
 extern const u8 GPIO_SWPORT_DR_TBL[];
@@ -76,7 +76,7 @@ PinName port_pin(PortName port, int pin_n)
     return (PinName)(pin_n + (port << 4));
 }
 
-void port_init(port_t *obj, PortName port, int mask, PinDirection dir) 
+void port_init(port_t *obj, PortName port, int mask, PinDirection dir)
 {
     u32 i;
 
@@ -84,7 +84,7 @@ void port_init(port_t *obj, PortName port, int mask, PinDirection dir)
         DBG_GPIO_ERR("port_init: Invalid port num(%d), max port num is %d\r\n", \
             port, (GPIO_PORT_NUM-1));
     }
-    
+
     // Fill PORT object structure for future use
     obj->port      = port;
     obj->mask      = mask;
@@ -96,7 +96,7 @@ void port_init(port_t *obj, PortName port, int mask, PinDirection dir)
     }
 
     i=0;
-    while (obj->pin_def[i] != 0xff) {        
+    while (obj->pin_def[i] != 0xff) {
         i++;
         if (i == GPIO_PORT_WIDTH_MAX) {
             break;
@@ -107,11 +107,11 @@ void port_init(port_t *obj, PortName port, int mask, PinDirection dir)
     port_dir(obj, dir);
 }
 
-void port_dir(port_t *obj, PinDirection dir) 
+void port_dir(port_t *obj, PinDirection dir)
 {
     uint32_t i;
     HAL_GPIO_PIN GPIO_Pin;
-    
+
     obj->direction = dir;
     for (i = 0; i < GPIO_PORT_WIDTH_MAX; i++) { // Process all pins
         if (obj->pin_def[i] == 0xff) {
@@ -121,7 +121,7 @@ void port_dir(port_t *obj, PinDirection dir)
         if (obj->mask & (1 << i)) { // If the pin is used
 
             GPIO_Pin.pin_name = HAL_GPIO_GetPinName(obj->pin_def[i]); // get the IP pin name
-            
+
             if (dir == PIN_OUTPUT) {
                 GPIO_Pin.pin_mode = DOUT_PUSH_PULL;
             } else { // PIN_INPUT
@@ -132,10 +132,10 @@ void port_dir(port_t *obj, PinDirection dir)
     }
 }
 
-void port_mode(port_t *obj, PinMode mode) 
+void port_mode(port_t *obj, PinMode mode)
 {
     uint32_t i;
-    
+
     for (i = 0; i < GPIO_PORT_WIDTH_MAX; i++) { // Process all pins
         if (obj->pin_def[i] == 0xff) {
             // end of table
@@ -147,7 +147,7 @@ void port_mode(port_t *obj, PinMode mode)
     }
 }
 
-void port_write(port_t *obj, int value) 
+void port_write(port_t *obj, int value)
 {
     uint32_t i;
     uint32_t pin_name;
@@ -160,7 +160,7 @@ void port_write(port_t *obj, int value)
         hal_port[i] =  HAL_READ32(GPIO_REG_BASE, GPIO_SWPORT_DR_TBL[i]);
         port_changed[i] = 0;
     }
-    
+
     for (i = 0; i < GPIO_PORT_WIDTH_MAX; i++) { // Process all pins
         if (obj->pin_def[i] == 0xff) {
             // end of table
@@ -181,10 +181,10 @@ void port_write(port_t *obj, int value)
             HAL_WRITE32(GPIO_REG_BASE, GPIO_SWPORT_DR_TBL[i], hal_port[i]);
         }
     }
-    
+
 }
 
-int port_read(port_t *obj) 
+int port_read(port_t *obj)
 {
     int value=0;
     u32 i;

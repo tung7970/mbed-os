@@ -16,104 +16,96 @@
 #ifndef _RTL8195A_ADC_H_
 #define _RTL8195A_ADC_H_
 
-
 //================ Register Bit Field ==========================
 //2 REG_ADC_FIFO_READ
-
-#define BIT_SHIFT_ADC_FIFO_RO 0
-#define BIT_MASK_ADC_FIFO_RO 0xffffffffL
-#define BIT_ADC_FIFO_RO(x)                    	(((x) & BIT_MASK_ADC_FIFO_RO) << BIT_SHIFT_ADC_FIFO_RO)
-#define BIT_CTRL_ADC_FIFO_RO(x)               	(((x) & BIT_MASK_ADC_FIFO_RO) << BIT_SHIFT_ADC_FIFO_RO)
-#define BIT_GET_ADC_FIFO_RO(x)                	(((x) >> BIT_SHIFT_ADC_FIFO_RO) & BIT_MASK_ADC_FIFO_RO)
-
+#define BIT_SHIFT_ADC_FIFO_RO     0
+#define BIT_MASK_ADC_FIFO_RO      0xffffffffL
+#define BIT_ADC_FIFO_RO(x)        (((x) & BIT_MASK_ADC_FIFO_RO) << BIT_SHIFT_ADC_FIFO_RO)
+#define BIT_CTRL_ADC_FIFO_RO(x)   (((x) & BIT_MASK_ADC_FIFO_RO) << BIT_SHIFT_ADC_FIFO_RO)
+#define BIT_GET_ADC_FIFO_RO(x)    (((x) >> BIT_SHIFT_ADC_FIFO_RO) & BIT_MASK_ADC_FIFO_RO)
 
 //2 REG_ADC_CONTROL
+#define BIT_SHIFT_ADC_DBG_SEL     24
+#define BIT_MASK_ADC_DBG_SEL      0x7
+#define BIT_ADC_DBG_SEL(x)        (((x) & BIT_MASK_ADC_DBG_SEL) << BIT_SHIFT_ADC_DBG_SEL)
+#define BIT_CTRL_ADC_DBG_SEL(x)   (((x) & BIT_MASK_ADC_DBG_SEL) << BIT_SHIFT_ADC_DBG_SEL)
+#define BIT_GET_ADC_DBG_SEL(x)    (((x) >> BIT_SHIFT_ADC_DBG_SEL) & BIT_MASK_ADC_DBG_SEL)
 
-#define BIT_SHIFT_ADC_DBG_SEL 24
-#define BIT_MASK_ADC_DBG_SEL 0x7
-#define BIT_ADC_DBG_SEL(x)                    	(((x) & BIT_MASK_ADC_DBG_SEL) << BIT_SHIFT_ADC_DBG_SEL)
-#define BIT_CTRL_ADC_DBG_SEL(x)               	(((x) & BIT_MASK_ADC_DBG_SEL) << BIT_SHIFT_ADC_DBG_SEL)
-#define BIT_GET_ADC_DBG_SEL(x)                	(((x) >> BIT_SHIFT_ADC_DBG_SEL) & BIT_MASK_ADC_DBG_SEL)
+#define BIT_SHIFT_ADC_THRESHOLD   16
+#define BIT_MASK_ADC_THRESHOLD    0x3f
+#define BIT_ADC_THRESHOLD(x)      (((x) & BIT_MASK_ADC_THRESHOLD) << BIT_SHIFT_ADC_THRESHOLD)
+#define BIT_CTRL_ADC_THRESHOLD(x) (((x) & BIT_MASK_ADC_THRESHOLD) << BIT_SHIFT_ADC_THRESHOLD)
+#define BIT_GET_ADC_THRESHOLD(x)  (((x) >> BIT_SHIFT_ADC_THRESHOLD) & BIT_MASK_ADC_THRESHOLD)
 
+#define BIT_SHIFT_ADC_BURST_SIZE   8
+#define BIT_MASK_ADC_BURST_SIZE    0x1f
+#define BIT_ADC_BURST_SIZE(x)      (((x) & BIT_MASK_ADC_BURST_SIZE) << BIT_SHIFT_ADC_BURST_SIZE)
+#define BIT_CTRL_ADC_BURST_SIZE(x) (((x) & BIT_MASK_ADC_BURST_SIZE) << BIT_SHIFT_ADC_BURST_SIZE)
+#define BIT_GET_ADC_BURST_SIZE(x)  (((x) >> BIT_SHIFT_ADC_BURST_SIZE) & BIT_MASK_ADC_BURST_SIZE)
 
-#define BIT_SHIFT_ADC_THRESHOLD 16
-#define BIT_MASK_ADC_THRESHOLD 0x3f
-#define BIT_ADC_THRESHOLD(x)                  	(((x) & BIT_MASK_ADC_THRESHOLD) << BIT_SHIFT_ADC_THRESHOLD)
-#define BIT_CTRL_ADC_THRESHOLD(x)             	(((x) & BIT_MASK_ADC_THRESHOLD) << BIT_SHIFT_ADC_THRESHOLD)
-#define BIT_GET_ADC_THRESHOLD(x)              	(((x) >> BIT_SHIFT_ADC_THRESHOLD) & BIT_MASK_ADC_THRESHOLD)
+#define BIT_ADC_ENDIAN             BIT(3)
+#define BIT_SHIFT_ADC_ENDIAN       3
+#define BIT_MASK_ADC_ENDIAN        0x1
+#define BIT_CTRL_ADC_ENDIAN(x)     (((x) & BIT_MASK_ADC_ENDIAN) << BIT_SHIFT_ADC_ENDIAN)
 
+#define BIT_ADC_OVERWRITE          BIT(2)
+#define BIT_SHIFT_ADC_OVERWRITE    2
+#define BIT_MASK_ADC_OVERWRITE     0x1
+#define BIT_CTRL_ADC_OVERWRITE(x)  (((x) & BIT_MASK_ADC_OVERWRITE) << BIT_SHIFT_ADC_OVERWRITE)
 
-#define BIT_SHIFT_ADC_BURST_SIZE 8
-#define BIT_MASK_ADC_BURST_SIZE 0x1f
-#define BIT_ADC_BURST_SIZE(x)                 	(((x) & BIT_MASK_ADC_BURST_SIZE) << BIT_SHIFT_ADC_BURST_SIZE)
-#define BIT_CTRL_ADC_BURST_SIZE(x)            	(((x) & BIT_MASK_ADC_BURST_SIZE) << BIT_SHIFT_ADC_BURST_SIZE)
-#define BIT_GET_ADC_BURST_SIZE(x)             	(((x) >> BIT_SHIFT_ADC_BURST_SIZE) & BIT_MASK_ADC_BURST_SIZE)
+#define BIT_ADC_ONESHOT            BIT(1)
+#define BIT_SHIFT_ADC_ONESHOT      1
+#define BIT_MASK_ADC_ONESHOT       0x1
+#define BIT_CTRL_ADC_ONESHOT(x)    (((x) & BIT_MASK_ADC_ONESHOT) << BIT_SHIFT_ADC_ONESHOT)
 
-#define BIT_ADC_ENDIAN                        	BIT(3)
-#define BIT_SHIFT_ADC_ENDIAN                  	3
-#define BIT_MASK_ADC_ENDIAN                   	0x1
-#define BIT_CTRL_ADC_ENDIAN(x)                	(((x) & BIT_MASK_ADC_ENDIAN) << BIT_SHIFT_ADC_ENDIAN)
-
-#define BIT_ADC_OVERWRITE                     	BIT(2)
-#define BIT_SHIFT_ADC_OVERWRITE               	2
-#define BIT_MASK_ADC_OVERWRITE                	0x1
-#define BIT_CTRL_ADC_OVERWRITE(x)             	(((x) & BIT_MASK_ADC_OVERWRITE) << BIT_SHIFT_ADC_OVERWRITE)
-
-#define BIT_ADC_ONESHOT                       	BIT(1)
-#define BIT_SHIFT_ADC_ONESHOT                 	1
-#define BIT_MASK_ADC_ONESHOT                  	0x1
-#define BIT_CTRL_ADC_ONESHOT(x)               	(((x) & BIT_MASK_ADC_ONESHOT) << BIT_SHIFT_ADC_ONESHOT)
-
-#define BIT_ADC_COMP_ONLY                     	BIT(0)
-#define BIT_SHIFT_ADC_COMP_ONLY               	0
-#define BIT_MASK_ADC_COMP_ONLY                	0x1
-#define BIT_CTRL_ADC_COMP_ONLY(x)             	(((x) & BIT_MASK_ADC_COMP_ONLY) << BIT_SHIFT_ADC_COMP_ONLY)
-
+#define BIT_ADC_COMP_ONLY          BIT(0)
+#define BIT_SHIFT_ADC_COMP_ONLY    0
+#define BIT_MASK_ADC_COMP_ONLY     0x1
+#define BIT_CTRL_ADC_COMP_ONLY(x)  (((x) & BIT_MASK_ADC_COMP_ONLY) << BIT_SHIFT_ADC_COMP_ONLY)
 
 //2 REG_ADC_INTR_EN
-#define BIT_ADC_AWAKE_CPU_EN                  	BIT(7)
-#define BIT_SHIFT_ADC_AWAKE_CPU_EN            	7
-#define BIT_MASK_ADC_AWAKE_CPU_EN             	0x1
-#define BIT_CTRL_ADC_AWAKE_CPU_EN(x)          	(((x) & BIT_MASK_ADC_AWAKE_CPU_EN) << BIT_SHIFT_ADC_AWAKE_CPU_EN)
+#define BIT_ADC_AWAKE_CPU_EN          BIT(7)
+#define BIT_SHIFT_ADC_AWAKE_CPU_EN    7
+#define BIT_MASK_ADC_AWAKE_CPU_EN     0x1
+#define BIT_CTRL_ADC_AWAKE_CPU_EN(x)  (((x) & BIT_MASK_ADC_AWAKE_CPU_EN) << BIT_SHIFT_ADC_AWAKE_CPU_EN)
 
-#define BIT_ADC_FIFO_RD_ERROR_EN              	BIT(6)
-#define BIT_SHIFT_ADC_FIFO_RD_ERROR_EN        	6
-#define BIT_MASK_ADC_FIFO_RD_ERROR_EN         	0x1
-#define BIT_CTRL_ADC_FIFO_RD_ERROR_EN(x)      	(((x) & BIT_MASK_ADC_FIFO_RD_ERROR_EN) << BIT_SHIFT_ADC_FIFO_RD_ERROR_EN)
+#define BIT_ADC_FIFO_RD_ERROR_EN         BIT(6)
+#define BIT_SHIFT_ADC_FIFO_RD_ERROR_EN   6
+#define BIT_MASK_ADC_FIFO_RD_ERROR_EN    0x1
+#define BIT_CTRL_ADC_FIFO_RD_ERROR_EN(x) (((x) & BIT_MASK_ADC_FIFO_RD_ERROR_EN) << BIT_SHIFT_ADC_FIFO_RD_ERROR_EN)
 
-#define BIT_ADC_FIFO_RD_REQ_EN                	BIT(5)
-#define BIT_SHIFT_ADC_FIFO_RD_REQ_EN          	5
-#define BIT_MASK_ADC_FIFO_RD_REQ_EN           	0x1
-#define BIT_CTRL_ADC_FIFO_RD_REQ_EN(x)        	(((x) & BIT_MASK_ADC_FIFO_RD_REQ_EN) << BIT_SHIFT_ADC_FIFO_RD_REQ_EN)
+#define BIT_ADC_FIFO_RD_REQ_EN           BIT(5)
+#define BIT_SHIFT_ADC_FIFO_RD_REQ_EN     5
+#define BIT_MASK_ADC_FIFO_RD_REQ_EN      0x1
+#define BIT_CTRL_ADC_FIFO_RD_REQ_EN(x)   (((x) & BIT_MASK_ADC_FIFO_RD_REQ_EN) << BIT_SHIFT_ADC_FIFO_RD_REQ_EN)
 
-#define BIT_ADC_FIFO_FULL_EN                  	BIT(4)
-#define BIT_SHIFT_ADC_FIFO_FULL_EN            	4
-#define BIT_MASK_ADC_FIFO_FULL_EN             	0x1
-#define BIT_CTRL_ADC_FIFO_FULL_EN(x)          	(((x) & BIT_MASK_ADC_FIFO_FULL_EN) << BIT_SHIFT_ADC_FIFO_FULL_EN)
+#define BIT_ADC_FIFO_FULL_EN             BIT(4)
+#define BIT_SHIFT_ADC_FIFO_FULL_EN       4
+#define BIT_MASK_ADC_FIFO_FULL_EN        0x1
+#define BIT_CTRL_ADC_FIFO_FULL_EN(x)     (((x) & BIT_MASK_ADC_FIFO_FULL_EN) << BIT_SHIFT_ADC_FIFO_FULL_EN)
 
-#define BIT_ADC_COMP_3_EN                     	BIT(3)
-#define BIT_SHIFT_ADC_COMP_3_EN               	3
-#define BIT_MASK_ADC_COMP_3_EN                	0x1
-#define BIT_CTRL_ADC_COMP_3_EN(x)             	(((x) & BIT_MASK_ADC_COMP_3_EN) << BIT_SHIFT_ADC_COMP_3_EN)
+#define BIT_ADC_COMP_3_EN                BIT(3)
+#define BIT_SHIFT_ADC_COMP_3_EN          3
+#define BIT_MASK_ADC_COMP_3_EN           0x1
+#define BIT_CTRL_ADC_COMP_3_EN(x)        (((x) & BIT_MASK_ADC_COMP_3_EN) << BIT_SHIFT_ADC_COMP_3_EN)
 
-#define BIT_ADC_COMP_2_EN                     	BIT(2)
-#define BIT_SHIFT_ADC_COMP_2_EN               	2
-#define BIT_MASK_ADC_COMP_2_EN                	0x1
-#define BIT_CTRL_ADC_COMP_2_EN(x)             	(((x) & BIT_MASK_ADC_COMP_2_EN) << BIT_SHIFT_ADC_COMP_2_EN)
+#define BIT_ADC_COMP_2_EN           BIT(2)
+#define BIT_SHIFT_ADC_COMP_2_EN     2
+#define BIT_MASK_ADC_COMP_2_EN      0x1
+#define BIT_CTRL_ADC_COMP_2_EN(x)   (((x) & BIT_MASK_ADC_COMP_2_EN) << BIT_SHIFT_ADC_COMP_2_EN)
 
-#define BIT_ADC_COMP_1_EN                     	BIT(1)
-#define BIT_SHIFT_ADC_COMP_1_EN               	1
-#define BIT_MASK_ADC_COMP_1_EN                	0x1
-#define BIT_CTRL_ADC_COMP_1_EN(x)             	(((x) & BIT_MASK_ADC_COMP_1_EN) << BIT_SHIFT_ADC_COMP_1_EN)
+#define BIT_ADC_COMP_1_EN           BIT(1)
+#define BIT_SHIFT_ADC_COMP_1_EN     1
+#define BIT_MASK_ADC_COMP_1_EN      0x1
+#define BIT_CTRL_ADC_COMP_1_EN(x)   (((x) & BIT_MASK_ADC_COMP_1_EN) << BIT_SHIFT_ADC_COMP_1_EN)
 
-#define BIT_ADC_COMP_0_EN                     	BIT(0)
-#define BIT_SHIFT_ADC_COMP_0_EN               	0
-#define BIT_MASK_ADC_COMP_0_EN                	0x1
-#define BIT_CTRL_ADC_COMP_0_EN(x)             	(((x) & BIT_MASK_ADC_COMP_0_EN) << BIT_SHIFT_ADC_COMP_0_EN)
-
+#define BIT_ADC_COMP_0_EN           BIT(0)
+#define BIT_SHIFT_ADC_COMP_0_EN     0
+#define BIT_MASK_ADC_COMP_0_EN      0x1
+#define BIT_CTRL_ADC_COMP_0_EN(x)   (((x) & BIT_MASK_ADC_COMP_0_EN) << BIT_SHIFT_ADC_COMP_0_EN)
 
 //2 REG_ADC_INTR_STS
-#define BIT_ADC_FIFO_THRESHOLD                	BIT(7)
+#define BIT_ADC_FIFO_THRESHOLD          BIT(7)
 #define BIT_SHIFT_ADC_FIFO_THRESHOLD          	7
 #define BIT_MASK_ADC_FIFO_THRESHOLD           	0x1
 #define BIT_CTRL_ADC_FIFO_THRESHOLD(x)        	(((x) & BIT_MASK_ADC_FIFO_THRESHOLD) << BIT_SHIFT_ADC_FIFO_THRESHOLD)
@@ -346,11 +338,11 @@
 #define HAL_ADC_WRITE32(addr, value)    HAL_WRITE32(ADC_REG_BASE,addr,value)
 #define HAL_ADC_READ32(addr)            HAL_READ32(ADC_REG_BASE,addr)
 
-RTK_STATUS HalADCInit8195a(IN VOID *Data);
-RTK_STATUS HalADCDeInit8195a(IN VOID *Data);
-RTK_STATUS HalADCEnableRtl8195a(IN VOID *Data);
-RTK_STATUS HalADCIntrCtrl8195a(IN VOID *Data);
-u32 HalADCReceiveRtl8195a(IN VOID *Data);
-u32 HalADCReadRegRtl8195a(IN VOID *Data,IN  u8 I2CReg);
+RTK_STATUS HalADCInit8195a(void *Data);
+RTK_STATUS HalADCDeInit8195a(void *Data);
+RTK_STATUS HalADCEnableRtl8195a(void *Data);
+RTK_STATUS HalADCIntrCtrl8195a(void *Data);
+u32 HalADCReceiveRtl8195a(void *Data);
+u32 HalADCReadRegRtl8195a(void *Data, u8 I2CReg);
 
 #endif

@@ -29,37 +29,31 @@ enum _TIMER_MODE_ {
 typedef uint32_t TIMER_MODE;
 typedef uint32_t *PTIMER_MODE;
 
-
 typedef struct _TIMER_ADAPTER_ {
-
     u32         TimerLoadValueUs;
     u32         TimerIrqPriority;
     TIMER_MODE  TimerMode;
     IRQ_HANDLE  IrqHandle;
-    u8          TimerId;    
+    u8          TimerId;
     u8          IrqDis;
-
-}TIMER_ADAPTER, *PTIMER_ADAPTER;
-
+} TIMER_ADAPTER, *PTIMER_ADAPTER;
 
 typedef struct _HAL_TIMER_OP_ {
     u32  (*HalGetTimerId)(u32 *TimerId);
-    BOOL (*HalTimerInit)(VOID *Data);
+    BOOL (*HalTimerInit)(void *Data);
     u32  (*HalTimerReadCount)(u32 TimerId);
-	//VOID (*HalTimerIrqEn)(u32 TimerId);
-    VOID (*HalTimerIrqClear)(u32 TimerId);
-    VOID (*HalTimerDis)(u32 TimerId);
-    VOID (*HalTimerEn)(u32 TimerId);
-    VOID (*HalTimerDumpReg)(u32 TimerId);
-	//VOID (*HalTimerReLoad)(u32 TimerId, u32 LoadUs);
-}HAL_TIMER_OP, *PHAL_TIMER_OP;
+    void (*HalTimerIrqClear)(u32 TimerId);
+    void (*HalTimerDis)(u32 TimerId);
+    void (*HalTimerEn)(u32 TimerId);
+    void (*HalTimerDumpReg)(u32 TimerId);
+} HAL_TIMER_OP, *PHAL_TIMER_OP;
 
 typedef struct _HAL_TIMER_OP_EXT_ {
     PHAL_TIMER_OP phal_timer_op_rom;
-    VOID (*HalTimerIrqEn)(u32 TimerId);
-    VOID (*HalTimerReLoad)(u32 TimerId, u32 LoadUs);
-    VOID (*HalTimerSync)(u32 TimerId);
-}HAL_TIMER_OP_EXT, *PHAL_TIMER_OP_EXT;
+    void (*HalTimerIrqEn)(u32 TimerId);
+    void (*HalTimerReLoad)(u32 TimerId, u32 LoadUs);
+    void (*HalTimerSync)(u32 TimerId);
+} HAL_TIMER_OP_EXT, *PHAL_TIMER_OP_EXT;
 
 #ifdef CONFIG_TIMER_MODULE
 // This variable declared in ROM code
@@ -67,48 +61,21 @@ extern HAL_TIMER_OP HalTimerOp;
 extern HAL_TIMER_OP_EXT HalTimerOpExt;
 #endif
 
-VOID HalTimerOpInit_Patch(
-    IN  VOID *Data
-);
-
+void HalTimerOpInit_Patch(void *Data);
 
 //======================================================
 // ROM Function prototype
-_LONG_CALL_ VOID HalTimerOpInitV02(IN  VOID *Data);
+_LONG_CALL_ void HalTimerOpInitV02(void *Data);
 
-#ifndef CONFIG_RELEASE_BUILD_LIBRARIES
+#ifdef CONFIG_RELEASE_BUILD_LIBRARIES
+void HalTimerOpInit(void *Data);
+HAL_Status HalTimerInit(void *Data);
+void HalTimerEnable(uint32_t TimerId);
+void HalTimerDisable(uint32_t TimerId);
+void HalTimerReLoad(uint32_t TimerId, uint32_t LoadUs);
+void HalTimerDeInit(void *Data);
+#else
 #define HalTimerOpInit      HalTimerOpInit_Patch
 #endif
 
-#ifdef CONFIG_RELEASE_BUILD_LIBRARIES
-void HalTimerOpInit(
-    void *Data
-);
-
-HAL_Status
-HalTimerInit(
-    void *Data
-);
-
-void
-HalTimerEnable(
-    uint32_t TimerId
-);
-
-void
-HalTimerDisable(
-    uint32_t TimerId
-);
-
-void
-HalTimerReLoad(
-    uint32_t TimerId,
-    uint32_t LoadUs
-);
-
-void
-HalTimerDeInit(
-    void *Data
-);
-#endif  // #ifdef CONFIG_RELEASE_BUILD_LIBRARIES
 #endif

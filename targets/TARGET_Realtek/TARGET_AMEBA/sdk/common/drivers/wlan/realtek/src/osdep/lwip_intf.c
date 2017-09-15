@@ -14,8 +14,6 @@
  * limitations under the License.
  */
  
-//#define _LWIP_INTF_C_
-
 #include <autoconf.h>
 #include <lwip_intf.h>
 #include <lwip/netif.h>
@@ -31,18 +29,17 @@
 //----- ------------------------------------------------------------------
 #if (CONFIG_LWIP_LAYER == 1)
 #if DEVICE_EMAC
-	extern struct netif *xnetif[];
+    extern struct netif *xnetif[];
 #else
-	extern struct netif xnetif[];			//LWIP netif
+    extern struct netif xnetif[];            //LWIP netif
 #endif
 #endif
-
 
 /**
  *      rltk_wlan_set_netif_info - set netif hw address and register dev pointer to netif device
  *      @idx_wlan: netif index
- *			    0 for STA only or SoftAP only or STA in STA+SoftAP concurrent mode, 
- *			    1 for SoftAP in STA+SoftAP concurrent mode
+ *                0 for STA only or SoftAP only or STA in STA+SoftAP concurrent mode, 
+ *                1 for SoftAP in STA+SoftAP concurrent mode
  *      @dev: register netdev pointer to LWIP. Reserved.
  *      @dev_addr: set netif hw address
  *
@@ -51,12 +48,9 @@
 void rltk_wlan_set_netif_info(int idx_wlan, void * dev, unsigned char * dev_addr)
 {
 #if (CONFIG_LWIP_LAYER == 1)
-#if DEVICE_EMAC
-	//rtw_memcpy(xnetif[idx_wlan]->hwaddr, dev_addr, 6);
-	//set netif hwaddr later
-#else
-	rtw_memcpy(xnetif[idx_wlan].hwaddr, dev_addr, 6);
-	xnetif[idx_wlan].state = dev;
+#if !DEVICE_EMAC
+    rtw_memcpy(xnetif[idx_wlan].hwaddr, dev_addr, 6);
+    xnetif[idx_wlan].state = dev;
 #endif
 #endif
 }
@@ -73,35 +67,34 @@ void rltk_wlan_set_netif_info(int idx_wlan, void * dev, unsigned char * dev_addr
 int rltk_wlan_send(int idx, struct eth_drv_sg *sg_list, int sg_len, int total_len)
 {
 #if (CONFIG_LWIP_LAYER == 1)
-	struct eth_drv_sg *last_sg;
+    struct eth_drv_sg *last_sg;
     struct sk_buff *skb = NULL;
     int ret = 0;
 
-	if(idx == -1){
-		DBG_ERR("netif is DOWN");
-		return -1;
-	}
-	DBG_TRACE("%s is called", __FUNCTION__);
+    if(idx == -1) {
+        DBG_ERR("netif is DOWN");
+        return -1;
+    }
+    DBG_TRACE("%s is called", __FUNCTION__);
 
     save_and_cli();
-	if(rltk_wlan_check_isup(idx))
-    	rltk_wlan_tx_inc(idx);
-	else {
-		DBG_ERR("netif is DOWN");
-		restore_flags();
-		return -1;
-	}
+    if (rltk_wlan_check_isup(idx)) {
+        rltk_wlan_tx_inc(idx);
+    } else {
+        DBG_ERR("netif is DOWN");
+        restore_flags();
+        return -1;
+    }
     restore_flags();
 
     skb = rltk_wlan_alloc_skb(total_len);
     if (skb == NULL) {
-		//DBG_ERR("rltk_wlan_alloc_skb() for data len=%d failed!", total_len);
         ret = -1;
         goto exit;
     }
 
-	for (last_sg = &sg_list[sg_len]; sg_list < last_sg; ++sg_list) {
-		rtw_memcpy(skb->tail, (void *)(sg_list->buf), sg_list->len);
+    for (last_sg = &sg_list[sg_len]; sg_list < last_sg; ++sg_list) {
+        rtw_memcpy(skb->tail, (void *)(sg_list->buf), sg_list->len);
         skb_put(skb,  sg_list->len);        
     }
 
@@ -126,25 +119,25 @@ exit:
 void rltk_wlan_recv(int idx, struct eth_drv_sg *sg_list, int sg_len)
 {
 #if (CONFIG_LWIP_LAYER == 1)
-	struct eth_drv_sg *last_sg;
+    struct eth_drv_sg *last_sg;
     struct sk_buff *skb;
 
-	DBG_TRACE("%s is called", __FUNCTION__);
-	
+    DBG_TRACE("%s is called", __FUNCTION__);
+    
     if (!rltk_wlan_check_isup(idx))
         return;
-	
-	if(idx == -1){
-		DBG_ERR("skb is NULL");
-		return;
-	}
-	
+    
+    if (idx == -1) {
+        DBG_ERR("skb is NULL");
+        return;
+    }
+    
     skb = rltk_wlan_get_recv_skb(idx);
-	DBG_ASSERT(skb, "No pending rx skb");
+    DBG_ASSERT(skb, "No pending rx skb");
 
-	for (last_sg = &sg_list[sg_len]; sg_list < last_sg; ++sg_list) {
+    for (last_sg = &sg_list[sg_len]; sg_list < last_sg; ++sg_list) {
         if (sg_list->buf != 0) {
-			rtw_memcpy((void *)(sg_list->buf), skb->data, sg_list->len);
+            rtw_memcpy((void *)(sg_list->buf), skb->data, sg_list->len);
             skb_pull(skb, sg_list->len);
         }
     }
@@ -170,57 +163,52 @@ int netif_is_valid_IP(int idx, unsigned char *ip_dest)
 #endif
     addr.addr = *ip_dest_addr;
     
-	if(pnetif->ip_addr.addr == 0)
+    if(pnetif->ip_addr.addr == 0)
         return 1;
-	
+    
     if(ip_addr_ismulticast(&addr) || ip_addr_isbroadcast(&addr,pnetif)){
-		return 1;
-	}
-		
-	//if(ip_addr_netcmp(&(pnetif->ip_addr), &addr, &(pnetif->netmask))) //addr&netmask
-	//	return 1;
-
-	if(ip_addr_cmp(&(pnetif->ip_addr),&addr))
-		return 1;
-
-	DBG_TRACE("invalid IP: %d.%d.%d.%d ",ip_dest[0],ip_dest[1],ip_dest[2],ip_dest[3]);
-#endif	
-#ifdef CONFIG_DONT_CARE_TP
-	if(pnetif->flags & NETIF_FLAG_IPSWITCH)
         return 1;
-	else
+    }
+        
+    if (ip_addr_cmp(&(pnetif->ip_addr),&addr))
+        return 1;
+
+    DBG_TRACE("invalid IP: %d.%d.%d.%d ",ip_dest[0],ip_dest[1],ip_dest[2],ip_dest[3]);
+#endif    
+#ifdef CONFIG_DONT_CARE_TP
+    if(pnetif->flags & NETIF_FLAG_IPSWITCH)
+        return 1;
+    else
 #endif
     return 0;
 #endif
 }
 
-#if DEVICE_EMAC
-
-#else
+#if !DEVICE_EMAC
 int netif_get_idx(struct netif *pnetif)
 {
 #if (CONFIG_LWIP_LAYER == 1)
-	int idx = pnetif - xnetif;
+    int idx = pnetif - xnetif;
 
-	switch(idx) {
-		case 0:
-			return 0;
-		case 1:
-			return 1;
-		default:
-			return -1;
-	}
-#else	
-	return -1;
+    switch(idx) {
+        case 0:
+            return 0;
+        case 1:
+            return 1;
+        default:
+            return -1;
+    }
+#else    
+    return -1;
 #endif
 }
 
 unsigned char *netif_get_hwaddr(int idx_wlan)
 {
 #if (CONFIG_LWIP_LAYER == 1)
-	return xnetif[idx_wlan].hwaddr;
+    return xnetif[idx_wlan].hwaddr;
 #else
-	return NULL;
+    return NULL;
 #endif
 }
 #endif
@@ -242,9 +230,8 @@ void netif_rx(int idx, unsigned int len)
 void netif_post_sleep_processing(void)
 {
 #if (CONFIG_LWIP_LAYER == 1)
-#if DEVICE_EMAC
-#else
-	lwip_POST_SLEEP_PROCESSING();	//For FreeRTOS tickless to enable Lwip ARP timer when leaving IPS - Alex Fang
+#if !DEVICE_EMAC
+    lwip_POST_SLEEP_PROCESSING();
 #endif
 #endif
 }
@@ -252,9 +239,8 @@ void netif_post_sleep_processing(void)
 void netif_pre_sleep_processing(void)
 {
 #if (CONFIG_LWIP_LAYER == 1)
-#if DEVICE_EMAC
-#else
-	lwip_PRE_SLEEP_PROCESSING();
+#if !DEVICE_EMAC
+    lwip_PRE_SLEEP_PROCESSING();
 #endif
 #endif
 }
@@ -262,10 +248,9 @@ void netif_pre_sleep_processing(void)
 #ifdef CONFIG_WOWLAN
 unsigned char *rltk_wlan_get_ip(int idx){
 #if (CONFIG_LWIP_LAYER == 1)
-	return LwIP_GetIP(&xnetif[idx]);
+    return LwIP_GetIP(&xnetif[idx]);
 #else
-	return NULL;
+    return NULL;
 #endif
 }
 #endif
-

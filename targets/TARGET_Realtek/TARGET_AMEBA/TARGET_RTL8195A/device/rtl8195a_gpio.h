@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: LicenseRef-PBL
  *
- * Licensed under the Permissive Binary License, Version 1.0 (the "License"); 
+ * Licensed under the Permissive Binary License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  *
  * You may obtain a copy of the License at https://www.mbed.com/licenses/PBL-1.0
@@ -12,7 +12,6 @@
  * under the License.
  *******************************************************************************
  */
-
 
 #ifndef _RTL8195A_GPIO_H_
 #define _RTL8195A_GPIO_H_
@@ -57,11 +56,9 @@ enum {
 //======================================================
 // ROM Function prototype
 extern PHAL_GPIO_ADAPTER _pHAL_Gpio_Adapter;
+
 #ifndef CONFIG_RELEASE_BUILD_LIBRARIES
-static __inline HAL_Status
-GPIO_Lock (
-    VOID
-)
+static __inline HAL_Status GPIO_Lock(VOID)
 {
     HAL_Status Status;
 
@@ -69,10 +66,9 @@ GPIO_Lock (
         _pHAL_Gpio_Adapter->EnterCritical();
     }
 
-    if(_pHAL_Gpio_Adapter->Locked) {
+    if (_pHAL_Gpio_Adapter->Locked) {
        Status = HAL_BUSY;
-    }
-    else {
+    } else {
        _pHAL_Gpio_Adapter->Locked = 1;
        Status = HAL_OK;
     }
@@ -84,11 +80,7 @@ GPIO_Lock (
     return Status;
 }
 
-
-static __inline VOID
-GPIO_UnLock (
-    VOID
-)
+static __inline VOID GPIO_UnLock(VOID)
 {
     if (_pHAL_Gpio_Adapter->EnterCritical) {
         _pHAL_Gpio_Adapter->EnterCritical();
@@ -102,119 +94,35 @@ GPIO_UnLock (
 }
 #endif  // #ifndef CONFIG_RELEASE_BUILD_LIBRARIES
 
-_LONG_CALL_ extern u32
-HAL_GPIO_IrqHandler_8195a(
-    IN VOID *pData
-);
+_LONG_CALL_ extern u32 HAL_GPIO_IrqHandler_8195a(VOID *pData);
+_LONG_CALL_ extern u32 HAL_GPIO_MbedIrqHandler_8195a(VOID *pData);
+_LONG_CALL_ HAL_Status HAL_GPIO_IntCtrl_8195a(HAL_GPIO_PIN *GPIO_Pin, u32 En);
+_LONG_CALL_ HAL_Status HAL_GPIO_Init_8195a(HAL_GPIO_PIN *GPIO_Pin);
+_LONG_CALL_ HAL_Status HAL_GPIO_DeInit_8195a(HAL_GPIO_PIN *GPIO_Pin);
+_LONG_CALL_ HAL_GPIO_PIN_STATE HAL_GPIO_ReadPin_8195a(HAL_GPIO_PIN *GPIO_Pin);
+_LONG_CALL_ HAL_Status HAL_GPIO_WritePin_8195a(HAL_GPIO_PIN *GPIO_Pin,
+                                               HAL_GPIO_PIN_STATE Pin_State);
 
-_LONG_CALL_ extern u32
-HAL_GPIO_MbedIrqHandler_8195a(
-    IN VOID *pData
-);
+_LONG_CALL_ HAL_Status HAL_GPIO_RegIrq_8195a(PIRQ_HANDLE pIrqHandle);
+_LONG_CALL_ HAL_Status HAL_GPIO_UnRegIrq_8195a(PIRQ_HANDLE pIrqHandle);
+_LONG_CALL_ HAL_Status HAL_GPIO_UserRegIrq_8195a(HAL_GPIO_PIN *GPIO_Pin,
+                                                 VOID *IrqHandler,
+                                                 VOID *IrqData);
 
-_LONG_CALL_ HAL_Status 
-HAL_GPIO_IntCtrl_8195a(
-    HAL_GPIO_PIN  *GPIO_Pin, 
-    u32 En
-);
+_LONG_CALL_ HAL_Status HAL_GPIO_UserUnRegIrq_8195a(HAL_GPIO_PIN *GPIO_Pin);
+_LONG_CALL_ HAL_Status HAL_GPIO_MaskIrq_8195a(HAL_GPIO_PIN *GPIO_Pin);
+_LONG_CALL_ HAL_Status HAL_GPIO_UnMaskIrq_8195a(HAL_GPIO_PIN *GPIO_Pin);
+_LONG_CALL_ HAL_Status HAL_GPIO_IntDebounce_8195a(HAL_GPIO_PIN *GPIO_Pin, u8 Enable);
+_LONG_CALL_ u32 HAL_GPIO_GetIPPinName_8195a(u32 chip_pin);
+_LONG_CALL_ HAL_Status HAL_GPIO_PullCtrl_8195a(u32 chip_pin, u8 pull_type);
+_LONG_CALL_ u32 GPIO_GetChipPinName_8195a(u32 port, u32 pin);
+_LONG_CALL_ VOID GPIO_PullCtrl_8195a(u32 chip_pin, u8 pull_type);
+_LONG_CALL_ VOID GPIO_Int_SetType_8195a(u8 pin_num, u8 int_mode);
 
-_LONG_CALL_ HAL_Status 
-HAL_GPIO_Init_8195a(
-    HAL_GPIO_PIN  *GPIO_Pin
-);
-
-_LONG_CALL_ HAL_Status 
-HAL_GPIO_DeInit_8195a(
-    HAL_GPIO_PIN  *GPIO_Pin
-);
-
-_LONG_CALL_ HAL_GPIO_PIN_STATE 
-HAL_GPIO_ReadPin_8195a(
-    HAL_GPIO_PIN  *GPIO_Pin
-);
-
-_LONG_CALL_ HAL_Status 
-HAL_GPIO_WritePin_8195a(
-    HAL_GPIO_PIN  *GPIO_Pin,
-    HAL_GPIO_PIN_STATE Pin_State
-);
-
-_LONG_CALL_ HAL_Status
-HAL_GPIO_RegIrq_8195a(
-    IN PIRQ_HANDLE pIrqHandle
-);
-
-_LONG_CALL_ HAL_Status
-HAL_GPIO_UnRegIrq_8195a(
-    IN PIRQ_HANDLE pIrqHandle
-);
-
-_LONG_CALL_ HAL_Status
-HAL_GPIO_UserRegIrq_8195a(
-    HAL_GPIO_PIN  *GPIO_Pin,
-    VOID *IrqHandler,
-    VOID *IrqData
-);
-
-_LONG_CALL_ HAL_Status
-HAL_GPIO_UserUnRegIrq_8195a(
-    HAL_GPIO_PIN  *GPIO_Pin
-);
-
-_LONG_CALL_ HAL_Status
-HAL_GPIO_MaskIrq_8195a(
-    HAL_GPIO_PIN  *GPIO_Pin
-);
-
-_LONG_CALL_ HAL_Status
-HAL_GPIO_UnMaskIrq_8195a(
-    HAL_GPIO_PIN  *GPIO_Pin
-);
-
-_LONG_CALL_ HAL_Status
-HAL_GPIO_IntDebounce_8195a(
-    HAL_GPIO_PIN  *GPIO_Pin,
-    u8 Enable
-);
-
-_LONG_CALL_ u32
-HAL_GPIO_GetIPPinName_8195a(
-    u32 chip_pin
-);
-
-_LONG_CALL_ HAL_Status
-HAL_GPIO_PullCtrl_8195a(
-    u32 chip_pin,
-    u8 pull_type
-);
-
-_LONG_CALL_ u32 
-GPIO_GetChipPinName_8195a(
-    u32 port,
-    u32 pin
-);
-
-_LONG_CALL_ VOID 
-GPIO_PullCtrl_8195a(
-    u32 chip_pin,
-    u8 pull_type
-);
-
-_LONG_CALL_ VOID 
-GPIO_Int_SetType_8195a(
-    u8 pin_num,
-    u8 int_mode
-);
-
-
-_LONG_CALL_  HAL_Status HAL_GPIO_IntCtrl_8195aV02(HAL_GPIO_PIN  *GPIO_Pin, u32 En);
+_LONG_CALL_ HAL_Status HAL_GPIO_IntCtrl_8195aV02(HAL_GPIO_PIN  *GPIO_Pin, u32 En);
 _LONG_CALL_ u32 GPIO_Int_Clear_8195aV02(u32 irq_clr);
 
-HAL_Status
-HAL_GPIO_ClearISR_8195a(
-    HAL_GPIO_PIN  *GPIO_Pin
-);
-
+HAL_Status HAL_GPIO_ClearISR_8195a(HAL_GPIO_PIN *GPIO_Pin);
 
 /********** HAL In-Line Functions **********/
 
@@ -225,12 +133,9 @@ HAL_GPIO_ClearISR_8195a(
   *
   * @retval The input port pin current status(High or Low).
   */
-static __inline s32 
-HAL_GPIO_ReadPin(
-    HAL_GPIO_PIN  *GPIO_Pin
-)
+static __inline s32 HAL_GPIO_ReadPin(HAL_GPIO_PIN *GPIO_Pin)
 {
-    return (s32)HAL_GPIO_ReadPin_8195a(GPIO_Pin);    
+    return (s32)HAL_GPIO_ReadPin_8195a(GPIO_Pin);
 }
 
 /**
@@ -242,11 +147,7 @@ HAL_GPIO_ReadPin(
   *
   * @retval None
   */
-static __inline VOID 
-HAL_GPIO_WritePin(
-    HAL_GPIO_PIN  *GPIO_Pin,
-    u32 Value
-)
+static __inline VOID HAL_GPIO_WritePin(HAL_GPIO_PIN *GPIO_Pin, u32 Value)
 {
     HAL_GPIO_WritePin_8195a(GPIO_Pin, (HAL_GPIO_PIN_STATE)Value);
 }
@@ -262,12 +163,7 @@ HAL_GPIO_WritePin(
   *
   * @retval None
   */
-static __inline VOID
-HAL_GPIO_UserRegIrq(
-    HAL_GPIO_PIN  *GPIO_Pin,
-    VOID *IrqHandler,
-    VOID *IrqData
-)
+static __inline VOID HAL_GPIO_UserRegIrq(HAL_GPIO_PIN *GPIO_Pin, VOID *IrqHandler, VOID *IrqData)
 {
     HAL_GPIO_UserRegIrq_8195a(GPIO_Pin, IrqHandler, IrqData);
 }
@@ -279,14 +175,10 @@ HAL_GPIO_UserRegIrq(
   *
   * @retval None
   */
-static __inline VOID
-HAL_GPIO_UserUnRegIrq(
-    HAL_GPIO_PIN  *GPIO_Pin
-)
+static __inline VOID HAL_GPIO_UserUnRegIrq(HAL_GPIO_PIN *GPIO_Pin)
 {
     HAL_GPIO_UserUnRegIrq_8195a(GPIO_Pin);
 }
-
 
 /**
   * @brief  Enable/Disable GPIO interrupt
@@ -297,11 +189,7 @@ HAL_GPIO_UserUnRegIrq(
   *
   * @retval HAL_Status
   */
-static __inline VOID
-HAL_GPIO_IntCtrl(
-    HAL_GPIO_PIN  *GPIO_Pin, 
-    u32 En
-)
+static __inline VOID HAL_GPIO_IntCtrl(HAL_GPIO_PIN *GPIO_Pin, u32 En)
 {
     HAL_GPIO_IntCtrl_8195a(GPIO_Pin, En);
 }
@@ -313,14 +201,10 @@ HAL_GPIO_IntCtrl(
   *
   * @retval None
   */
-static __inline VOID
-HAL_GPIO_MaskIrq(
-    HAL_GPIO_PIN  *GPIO_Pin
-)
+static __inline VOID HAL_GPIO_MaskIrq(HAL_GPIO_PIN *GPIO_Pin)
 {
     HAL_GPIO_MaskIrq_8195a(GPIO_Pin);
 }
-
 
 /**
   * @brief  UnMask the interrupt of a specified pin
@@ -329,15 +213,10 @@ HAL_GPIO_MaskIrq(
   *
   * @retval None
   */
-static __inline VOID
-HAL_GPIO_UnMaskIrq(
-    HAL_GPIO_PIN  *GPIO_Pin
-)
+static __inline VOID HAL_GPIO_UnMaskIrq(HAL_GPIO_PIN *GPIO_Pin)
 {
     HAL_GPIO_ClearISR_8195a(GPIO_Pin);
     HAL_GPIO_UnMaskIrq_8195a(GPIO_Pin);
 }
 
-
 #endif  // end of "#define _RTL8195A_GPIO_H_"
-

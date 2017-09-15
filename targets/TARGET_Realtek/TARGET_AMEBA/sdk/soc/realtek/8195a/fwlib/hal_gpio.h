@@ -75,7 +75,7 @@ enum {
     _PD_7  = (_PORT_D<<4|7),
     _PD_8  = (_PORT_D<<4|8),
     _PD_9  = (_PORT_D<<4|9),
-  
+
     _PE_0  = (_PORT_E<<4|0),
     _PE_1  = (_PORT_E<<4|1),
     _PE_2  = (_PORT_E<<4|2),
@@ -87,7 +87,7 @@ enum {
     _PE_8  = (_PORT_E<<4|8),
     _PE_9  = (_PORT_E<<4|9),
     _PE_A  = (_PORT_E<<4|10),
-  
+
     _PF_0  = (_PORT_F<<4|0),
     _PF_1  = (_PORT_F<<4|1),
     _PF_2  = (_PORT_F<<4|2),
@@ -147,8 +147,7 @@ enum {
 };
 typedef uint32_t HAL_PIN_NAME;
 
-enum
-{
+enum {
   GPIO_PIN_LOW  = 0,
   GPIO_PIN_HIGH = 1,
   GPIO_PIN_ERR  = 2     // read Pin error
@@ -166,7 +165,7 @@ enum {
     INT_LOW         = (5|HAL_GPIO_PIN_INT_MODE),    // Interrupt Low level trigger
     INT_HIGH        = (6|HAL_GPIO_PIN_INT_MODE),    // Interrupt High level trigger
     INT_FALLING     = (7|HAL_GPIO_PIN_INT_MODE),    // Interrupt Falling edge trigger
-    INT_RISING      = (8|HAL_GPIO_PIN_INT_MODE)     // Interrupt Rising edge trigger        
+    INT_RISING      = (8|HAL_GPIO_PIN_INT_MODE)     // Interrupt Rising edge trigger
 };
 typedef uint32_t HAL_GPIO_PIN_MODE;
 
@@ -189,8 +188,8 @@ typedef uint32_t HAL_PinMode;
 typedef struct _HAL_GPIO_PORT_ {
     u32 out_data;       // to write the GPIO port
     u32 in_data;        // to read the GPIO port
-    u32 dir;            // config each pin direction    
-}HAL_GPIO_PORT, *PHAL_GPIO_PORT;
+    u32 dir;            // config each pin direction
+} HAL_GPIO_PORT, *PHAL_GPIO_PORT;
 
 #define HAL_GPIO_PIN_NAME(port,pin)         (((port)<<5)|(pin))
 #define HAL_GPIO_GET_PORT_BY_NAME(x)        ((x>>5) & 0x03)
@@ -199,55 +198,33 @@ typedef struct _HAL_GPIO_PORT_ {
 typedef struct _HAL_GPIO_PIN_ {
     HAL_GPIO_PIN_MODE pin_mode;
     u32 pin_name;    // Pin: [7:5]: port number, [4:0]: pin number
-}HAL_GPIO_PIN, *PHAL_GPIO_PIN;
+} HAL_GPIO_PIN, *PHAL_GPIO_PIN;
 
 typedef struct _HAL_GPIO_OP_ {
 #if defined(__ICCARM__)
     void* dummy;
 #endif
-}HAL_GPIO_OP, *PHAL_GPIO_OP;
+} HAL_GPIO_OP, *PHAL_GPIO_OP;
 
-typedef void (*GPIO_IRQ_FUN)(VOID *Data, u32 Id);
+typedef void (*GPIO_IRQ_FUN)(void *Data, u32 Id);
 typedef void (*GPIO_USER_IRQ_FUN)(u32 Id);
 
 typedef struct _HAL_GPIO_ADAPTER_ {
     IRQ_HANDLE IrqHandle;   // GPIO HAL IRQ Handle
     GPIO_USER_IRQ_FUN UserIrqHandler;   // GPIO IRQ Handler
     GPIO_IRQ_FUN PortA_IrqHandler[32]; // The interrupt handler triggered by Port A[x]
-    VOID *PortA_IrqData[32];
-    VOID (*EnterCritical)(void);
-    VOID (*ExitCritical)(void);
+    void *PortA_IrqData[32];
+    void (*EnterCritical)(void);
+    void (*ExitCritical)(void);
     u32 Local_Gpio_Dir[3];  // to record direction setting: 0- IN, 1- Out
     u8 Gpio_Func_En;    // Is GPIO HW function enabled ?
     u8 Locked;
-}HAL_GPIO_ADAPTER, *PHAL_GPIO_ADAPTER;
+} HAL_GPIO_ADAPTER, *PHAL_GPIO_ADAPTER;
 
-u32 
-HAL_GPIO_GetPinName(
-    u32 chip_pin
-);
-
-VOID 
-HAL_GPIO_PullCtrl(
-    u32 pin,
-    u32 mode    
-);
-
-VOID 
-HAL_GPIO_Init(
-    HAL_GPIO_PIN  *GPIO_Pin
-);
-
-VOID 
-HAL_GPIO_Irq_Init(
-    HAL_GPIO_PIN  *GPIO_Pin
-);
-
-VOID
-HAL_GPIO_IP_DeInit(
-    VOID
-);
-
+u32 HAL_GPIO_GetPinName(u32 chip_pin);
+void HAL_GPIO_PullCtrl(u32 pin, u32 mode);
+void HAL_GPIO_Init(HAL_GPIO_PIN  *GPIO_Pin);
+void HAL_GPIO_Irq_Init(HAL_GPIO_PIN  *GPIO_Pin);
+void HAL_GPIO_IP_DeInit(void);
 
 #endif  // end of "#define _HAL_GPIO_H_"
-

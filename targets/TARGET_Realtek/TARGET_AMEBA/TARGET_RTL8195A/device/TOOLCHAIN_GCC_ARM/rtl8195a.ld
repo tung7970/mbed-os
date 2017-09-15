@@ -194,10 +194,10 @@ SECTIONS
         __end__ = .;
         end = __end__;
         *(.heap*)
-    . = ORIGIN(SRAM1) + LENGTH(SRAM1) - StackSize;
+        . = ORIGIN(SRAM1) + LENGTH(SRAM1) - StackSize;
         __HeapLimit = .;
     } > SRAM1
-    
+
     .TCM_overlay :
     {
         __bss_dtcm_start__ = .;
@@ -206,7 +206,7 @@ SECTIONS
         *(.tcm.heap*)
         __bss_dtcm_end__ = .;
     } > TCM
-    
+
     /* .stack_dummy section doesn't contains any symbols. It is only
      * used for linker to calculate size of stack sections, and assign
      * values to stack symbols later */
@@ -214,7 +214,7 @@ SECTIONS
     {
         __StackLimit = .;
         *(.stack)
-    . += StackSize - (. - __StackLimit);
+        . += StackSize - (. - __StackLimit);
     } > SRAM1
 
     /* Set stack top to end of RAM, and stack limit move down by

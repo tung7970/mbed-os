@@ -292,17 +292,17 @@
 
 
 //================ DAC HAL Macro  ===========================
-#define HAL_DAC_WRITE32(dacidx, addr, value)    HAL_WRITE32(DAC_REG_BASE+dacidx*0x800 \
-                                                        ,addr,value)
-#define HAL_DAC_READ32(dacidx, addr)            HAL_READ32(DAC_REG_BASE+dacidx*0x800,addr)
-
+#define HAL_DAC_WRITE32(dacidx, addr, value)    \
+                       HAL_WRITE32(DAC_REG_BASE + dacidx*0x800, addr,value)
+#define HAL_DAC_READ32(dacidx, addr)            \
+                       HAL_READ32(DAC_REG_BASE+dacidx*0x800,addr)
 
 //================ DAC Function Prototypes  =====================
-RTK_STATUS HalDACInit8195a(IN  VOID *Data);
-RTK_STATUS HalDACDeInit8195a(IN  VOID *Data);
-RTK_STATUS HalDACEnableRtl8195a(IN  VOID *Data);
-RTK_STATUS HalDACIntrCtrl8195a(IN  VOID    *Data);
-u8 HalDACSendRtl8195a(IN  VOID    *Data);
-u32 HalDACReadRegRtl8195a(IN  VOID    *Data,IN  u8      I2CReg);
+RTK_STATUS HalDACInit8195a(void *Data);
+RTK_STATUS HalDACDeInit8195a(void *Data);
+RTK_STATUS HalDACEnableRtl8195a(void *Data);
+RTK_STATUS HalDACIntrCtrl8195a(void *Data);
+u8 HalDACSendRtl8195a(void *Data);
+u32 HalDACReadRegRtl8195a(void *Data, u8 I2CReg);
 
 #endif

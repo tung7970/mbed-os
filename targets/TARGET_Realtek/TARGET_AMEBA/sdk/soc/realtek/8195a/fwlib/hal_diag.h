@@ -67,7 +67,7 @@
 
 typedef struct _LOG_UART_ADAPTER_ {
     u32     BaudRate;
-    u32     FIFOControl; 
+    u32     FIFOControl;
     u32     IntEnReg;
     u8      Parity;
     u8      Stop;
@@ -85,18 +85,18 @@ typedef struct _COMMAND_TABLE_ {
 //HalLogUartHandle(void);
 
 
-extern _LONG_CALL_ROM_ u32 
+extern _LONG_CALL_ROM_ u32
 HalLogUartInit(
     IN  LOG_UART_ADAPTER    UartAdapter
     );
 
 
-extern _LONG_CALL_ROM_ VOID 
+extern _LONG_CALL_ROM_ VOID
 HalSerialPutcRtl8195a(
     IN  u8 c
     );
 
-extern _LONG_CALL_ROM_ u8 
+extern _LONG_CALL_ROM_ u8
 HalSerialGetcRtl8195a(
     IN  BOOL    PullMode
     );

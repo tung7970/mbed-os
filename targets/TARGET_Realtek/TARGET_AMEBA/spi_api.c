@@ -106,23 +106,23 @@ void spi_init (spi_t *obj, PinName mosi, PinName miso, PinName sclk, PinName sse
     }
 
     if ((ssi_idx == 0) && (ssi_pinmux == SSI0_MUX_TO_GPIOE)) {
-            DBG_SSI_WARN(ANSI_COLOR_MAGENTA"SPI0 Pin may conflict with JTAG\r\n"ANSI_COLOR_RESET);        
+            DBG_SSI_WARN(ANSI_COLOR_MAGENTA"SPI0 Pin may conflict with JTAG\r\n"ANSI_COLOR_RESET);
     }
 
     //TODO: Implement default setting structure.
     pHalSsiOp->HalSsiLoadSetting(pHalSsiAdaptor, (void*)&SpiDefaultSetting);
     pHalSsiAdaptor->DefaultRxThresholdLevel = SpiDefaultSetting.RxThresholdLevel;
 
-    if(HalSsiInit(pHalSsiAdaptor) != HAL_OK){
+    if (HalSsiInit(pHalSsiAdaptor) != HAL_OK) {
         DBG_SSI_ERR(ANSI_COLOR_RED"spi_init(): SPI %x init fails.\n"ANSI_COLOR_RESET,pHalSsiAdaptor->Index);
-        return;        
+        return;
     }
     osDelay(1);
 }
 
 void spi_free (spi_t *obj)
 {
-    PHAL_SSI_ADAPTOR pHalSsiAdaptor;    
+    PHAL_SSI_ADAPTOR pHalSsiAdaptor;
     pHalSsiAdaptor = &obj->spi_adp;
     HalSsiDeInit(pHalSsiAdaptor);
 

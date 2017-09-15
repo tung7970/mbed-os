@@ -51,13 +51,15 @@ IIR[3:0]:
 1100 = character timeout
 */
 enum {
-    IIR_MODEM_STATUS = 0,   //Clear to send or data set ready or ring indicator or data carrier detect.
+    IIR_MODEM_STATUS = 0,   // Clear to send or data set ready
+                            // or ring indicator
+                            // or data carrier detect.
     IIR_NO_PENDING = 1,
-    IIR_THR_EMPTY = 2,   // TX FIFO level lower than threshold or FIFO empty
-    IIR_RX_RDY = 4,     // RX data ready
+    IIR_THR_EMPTY = 2,      // TX FIFO level lower than threshold or FIFO empty
+    IIR_RX_RDY = 4,         // RX data ready
     IIR_RX_LINE_STATUS = 6, // Overrun/parity/framing errors or break interrupt
     IIR_BUSY = 7,
-    IIR_CHAR_TIMEOUT = 12   // timeout: Rx dara ready but no read 
+    IIR_CHAR_TIMEOUT = 12   // timeout: Rx dara ready but no read
 };
 typedef uint32_t LOG_UART_INT_ID;
 
@@ -80,8 +82,8 @@ enum {
     LSR_BI =   BIT(4),   // Break Interrupt bit
     LSR_THRE = BIT(5),   // Transmit Holding Register Empty bit(IER_PTIME=0)
     LSR_FIFOF = BIT(5),  // Transmit FIFO Full bit(IER_PTIME=1)
-    LSR_TEMT = BIT(6),   // Transmitter Empty bit 
-    LSR_RFE =  BIT(7)    // Receiver FIFO Error bit    
+    LSR_TEMT = BIT(6),   // Transmitter Empty bit
+    LSR_RFE =  BIT(7)    // Receiver FIFO Error bit
 };
 typedef uint32_t LOG_UART_LINE_STATUS;
 
@@ -113,7 +115,7 @@ typedef uint32_t LOG_UART_FIFO_CTRL;
 
 typedef struct _HAL_LOG_UART_ADAPTER_ {
     u32 BaudRate;
-    u32 FIFOControl; 
+    u32 FIFOControl;
     u32 IntEnReg;
     u8 Parity;
     u8 Stop;
@@ -128,34 +130,30 @@ typedef struct _HAL_LOG_UART_ADAPTER_ {
     u8 *pRxStartAddr;
 
     IRQ_HANDLE IrqHandle;
-    VOID (*LineStatusCallback)(VOID *para, u8 status);    // User Line Status interrupt callback
-    VOID (*TxCompCallback)(VOID *para);    // User Tx complete callback
-    VOID (*RxCompCallback)(VOID *para);    // User Rx complete callback
-    VOID *LineStatusCbPara; // the argument for LineStatusCallback
-    VOID *TxCompCbPara; // the argument for TxCompCallback
-    VOID *RxCompCbPara; // the argument for RxCompCallback
+    void (*LineStatusCallback)(void *para, u8 status);    // User Line Status interrupt callback
+    void (*TxCompCallback)(void *para);    // User Tx complete callback
+    void (*RxCompCallback)(void *para);    // User Rx complete callback
+    void *LineStatusCbPara; // the argument for LineStatusCallback
+    void *TxCompCbPara; // the argument for TxCompCallback
+    void *RxCompCbPara; // the argument for RxCompCallback
 
     void (*api_irq_handler)(u32 id, LOG_UART_INT_ID event);
     u32 api_irq_id;
-}HAL_LOG_UART_ADAPTER, *PHAL_LOG_UART_ADAPTER;
+} HAL_LOG_UART_ADAPTER, *PHAL_LOG_UART_ADAPTER;
 
-VOID HalLogUartIrqHandle(VOID * Data);
-VOID HalLogUartSetBaudRate(HAL_LOG_UART_ADAPTER *pUartAdapter);
-VOID HalLogUartSetLineCtrl(HAL_LOG_UART_ADAPTER *pUartAdapter);
-VOID HalLogUartSetIntEn(HAL_LOG_UART_ADAPTER *pUartAdapter);
+void HalLogUartIrqHandle(void * Data);
+void HalLogUartSetBaudRate(HAL_LOG_UART_ADAPTER *pUartAdapter);
+void HalLogUartSetLineCtrl(HAL_LOG_UART_ADAPTER *pUartAdapter);
+void HalLogUartSetIntEn(HAL_LOG_UART_ADAPTER *pUartAdapter);
 u32 HalLogUartInitSetting(HAL_LOG_UART_ADAPTER *pUartAdapter);
-u32 HalLogUartRecv(HAL_LOG_UART_ADAPTER *pUartAdapter,
-                    u8  *pRxData, u32 Length, u32 TimeoutMS);
-u32 HalLogUartSend(HAL_LOG_UART_ADAPTER *pUartAdapter,
-        u8 *pTxData, u32 Length, u32 TimeoutMS);
-HAL_Status HalLogUartIntSend(HAL_LOG_UART_ADAPTER *pUartAdapter,
-        u8 *pTxData, u32 Length);
-HAL_Status HalLogUartIntRecv(HAL_LOG_UART_ADAPTER *pUartAdapter,
-        u8  *pRxData, u32 Length);
-VOID HalLogUartAbortIntSend(HAL_LOG_UART_ADAPTER *pUartAdapter);
-VOID HalLogUartAbortIntRecv(HAL_LOG_UART_ADAPTER *pUartAdapter);
+u32 HalLogUartRecv(HAL_LOG_UART_ADAPTER *pUartAdapter, u8 *pRxData, u32 Length, u32 TimeoutMS);
+u32 HalLogUartSend(HAL_LOG_UART_ADAPTER *pUartAdapter, u8 *pTxData, u32 Length, u32 TimeoutMS);
+HAL_Status HalLogUartIntSend(HAL_LOG_UART_ADAPTER *pUartAdapter, u8 *pTxData, u32 Length);
+HAL_Status HalLogUartIntRecv(HAL_LOG_UART_ADAPTER *pUartAdapter, u8  *pRxData, u32 Length);
+void HalLogUartAbortIntSend(HAL_LOG_UART_ADAPTER *pUartAdapter);
+void HalLogUartAbortIntRecv(HAL_LOG_UART_ADAPTER *pUartAdapter);
 HAL_Status HalLogUartRstFIFO(HAL_LOG_UART_ADAPTER *pUartAdapter, u8 RstCtrl);
-VOID HalLogUartEnable(HAL_LOG_UART_ADAPTER *pUartAdapter);
-VOID HalLogUartDisable(HAL_LOG_UART_ADAPTER *pUartAdapter);
+void HalLogUartEnable(HAL_LOG_UART_ADAPTER *pUartAdapter);
+void HalLogUartDisable(HAL_LOG_UART_ADAPTER *pUartAdapter);
 
 #endif

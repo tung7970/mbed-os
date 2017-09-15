@@ -21,7 +21,7 @@
 
 const u32 log_uart_support_rate[] = {
     UART_BAUD_RATE_2400,   UART_BAUD_RATE_4800,   UART_BAUD_RATE_9600,
-    UART_BAUD_RATE_19200,  UART_BAUD_RATE_38400,  UART_BAUD_RATE_57600, 
+    UART_BAUD_RATE_19200,  UART_BAUD_RATE_38400,  UART_BAUD_RATE_57600,
     UART_BAUD_RATE_115200, UART_BAUD_RATE_921600, UART_BAUD_RATE_1152000,
 
     0xFFFFFFFF
@@ -54,7 +54,7 @@ int32_t log_uart_init (log_uart_t *obj, int baudrate, int data_bits, SerialParit
         if (log_uart_support_rate[i] == baudrate) {
             break;
         }
-    }    
+    }
     if (log_uart_support_rate[i]== 0xFFFFFF) {
         DBG_UART_ERR("log_uart_init: Not support Baud Rate %d\n", baudrate);
         return -1;
@@ -64,14 +64,14 @@ int32_t log_uart_init (log_uart_t *obj, int baudrate, int data_bits, SerialParit
         DBG_UART_ERR("log_uart_init: Not support Word Width %d\n", data_bits);
         return -1;
     }
-    
+
     //4 Inital Log uart
     pUartAdapter->BaudRate = baudrate;
     pUartAdapter->DataLength = data_bits-5;
     pUartAdapter->FIFOControl = FCR_FIFO_EN | FCR_TX_TRIG_HF | FCR_RX_TRIG_HF;
-    // only enable Rx linstatus at initial, 
+    // only enable Rx linstatus at initial,
     // Tx & Rx interrupt will be enabled @ transfer start time
-    pUartAdapter->IntEnReg = IER_ELSI;  
+    pUartAdapter->IntEnReg = IER_ELSI;
     switch (parity) {
     case ParityNone:
         pUartAdapter->Parity = LCR_PARITY_NONE;
@@ -80,7 +80,7 @@ int32_t log_uart_init (log_uart_t *obj, int baudrate, int data_bits, SerialParit
     case ParityOdd:
         pUartAdapter->Parity = LCR_PARITY_ODD;
         break;
-        
+
     case ParityEven:
         pUartAdapter->Parity = LCR_PARITY_EVEN;
         break;
@@ -97,8 +97,8 @@ int32_t log_uart_init (log_uart_t *obj, int baudrate, int data_bits, SerialParit
         pUartAdapter->Stop = LCR_STOP_1B;
     }
 
-    //4 Initial Log Uart 
-    HalLogUartInitSetting(pUartAdapter);    
+    //4 Initial Log Uart
+    HalLogUartInitSetting(pUartAdapter);
 
     // disable all debug message
     ConfigDebugErr = 0;
@@ -111,7 +111,7 @@ int32_t log_uart_init (log_uart_t *obj, int baudrate, int data_bits, SerialParit
     return 0;
 }
 
-void log_uart_free(log_uart_t *obj) 
+void log_uart_free(log_uart_t *obj)
 {
     LOG_UART_ADAPTER UartAdapter;
 
@@ -130,13 +130,13 @@ void log_uart_free(log_uart_t *obj)
     UartAdapter.Stop = UART_STOP_1BIT;
 
     // un_register current IRQ first
-    InterruptUnRegister(&(obj->log_hal_uart.IrqHandle)); 
+    InterruptUnRegister(&(obj->log_hal_uart.IrqHandle));
 
     //4 Initial Log Uart
     HalLogUartInit(UartAdapter);
 }
 
-void log_uart_baud(log_uart_t *obj, int baudrate) 
+void log_uart_baud(log_uart_t *obj, int baudrate)
 {
     HAL_LOG_UART_ADAPTER *pUartAdapter;
     int i;
@@ -156,17 +156,17 @@ void log_uart_baud(log_uart_t *obj, int baudrate)
     HalLogUartSetBaudRate(pUartAdapter);
 }
 
-void log_uart_format(log_uart_t *obj, int data_bits, SerialParity parity, int stop_bits) 
+void log_uart_format(log_uart_t *obj, int data_bits, SerialParity parity, int stop_bits)
 {
     HAL_LOG_UART_ADAPTER *pUartAdapter;
     pUartAdapter = &obj->log_hal_uart;
-    
+
     // check word width
     if ((data_bits < 5) || (data_bits > 8)) {
         DBG_UART_ERR("log_uart_format: Not support Word Width %d\n", data_bits);
         return;
     }
-    
+
     //4 Inital Log uart
     pUartAdapter->DataLength = data_bits - 5;
     switch (parity) {
@@ -177,7 +177,7 @@ void log_uart_format(log_uart_t *obj, int data_bits, SerialParity parity, int st
     case ParityOdd:
         pUartAdapter->Parity = LCR_PARITY_ODD;
         break;
-        
+
     case ParityEven:
         pUartAdapter->Parity = LCR_PARITY_EVEN;
         break;
@@ -200,16 +200,16 @@ void log_uart_format(log_uart_t *obj, int data_bits, SerialParity parity, int st
 /******************************************************************************
  * INTERRUPTS HANDLING
  ******************************************************************************/
-void log_uart_irq_handler(log_uart_t *obj, loguart_irq_handler handler, uint32_t id) 
+void log_uart_irq_handler(log_uart_t *obj, loguart_irq_handler handler, uint32_t id)
 {
     HAL_LOG_UART_ADAPTER *pUartAdapter;
 
     pUartAdapter = &(obj->log_hal_uart);
     pUartAdapter->api_irq_handler = handler;
-    pUartAdapter->api_irq_id = id;    
+    pUartAdapter->api_irq_id = id;
 }
 
-void log_uart_irq_set(log_uart_t *obj, LOG_UART_INT_ID irq, uint32_t enable) 
+void log_uart_irq_set(log_uart_t *obj, LOG_UART_INT_ID irq, uint32_t enable)
 {
     HAL_LOG_UART_ADAPTER *pUartAdapter;
     u8 int_en=0;
@@ -237,7 +237,7 @@ void log_uart_irq_set(log_uart_t *obj, LOG_UART_INT_ID irq, uint32_t enable)
         DBG_UART_WARN("log_uart_irq_set: Unknown Irq Id\n");
         return;
     }
-        
+
     if (enable) {
         pUartAdapter->IntEnReg |= int_en;
     } else {
@@ -251,7 +251,7 @@ void log_uart_irq_set(log_uart_t *obj, LOG_UART_INT_ID irq, uint32_t enable)
  * READ/WRITE
  ******************************************************************************/
 
-char log_uart_getc(log_uart_t *obj) 
+char log_uart_getc(log_uart_t *obj)
 {
     HAL_LOG_UART_ADAPTER *pUartAdapter=(PHAL_LOG_UART_ADAPTER)&(obj->log_hal_uart);
 
@@ -259,15 +259,15 @@ char log_uart_getc(log_uart_t *obj)
     return (char)(HAL_UART_READ32(UART_REV_BUF_OFF) & 0xFF);
 }
 
-void log_uart_putc(log_uart_t *obj, char c) 
+void log_uart_putc(log_uart_t *obj, char c)
 {
     HAL_LOG_UART_ADAPTER *pUartAdapter=(PHAL_LOG_UART_ADAPTER)&(obj->log_hal_uart);
-    
+
     while (!log_uart_writable(obj));
     HAL_UART_WRITE8(UART_TRAN_HOLD_OFF, c);
 }
 
-int log_uart_readable(log_uart_t *obj) 
+int log_uart_readable(log_uart_t *obj)
 {
     HAL_LOG_UART_ADAPTER *pUartAdapter=(PHAL_LOG_UART_ADAPTER)&(obj->log_hal_uart);
     volatile u8 line_status;
@@ -281,7 +281,7 @@ int log_uart_readable(log_uart_t *obj)
     }
 }
 
-int log_uart_writable(log_uart_t *obj) 
+int log_uart_writable(log_uart_t *obj)
 {
     HAL_LOG_UART_ADAPTER *pUartAdapter=(PHAL_LOG_UART_ADAPTER)&(obj->log_hal_uart);
     volatile u8 line_status;
@@ -294,7 +294,7 @@ int log_uart_writable(log_uart_t *obj)
     }
 }
 
-void log_uart_clear(log_uart_t *obj) 
+void log_uart_clear(log_uart_t *obj)
 {
     HAL_LOG_UART_ADAPTER *pUartAdapter=(PHAL_LOG_UART_ADAPTER)&(obj->log_hal_uart);
 
@@ -303,7 +303,7 @@ void log_uart_clear(log_uart_t *obj)
     pUartAdapter->RxCount = 0;
 }
 
-void log_uart_clear_tx(log_uart_t *obj) 
+void log_uart_clear_tx(log_uart_t *obj)
 {
     HAL_LOG_UART_ADAPTER *pUartAdapter=(PHAL_LOG_UART_ADAPTER)&(obj->log_hal_uart);
 
@@ -311,7 +311,7 @@ void log_uart_clear_tx(log_uart_t *obj)
     pUartAdapter->TxCount = 0;
 }
 
-void log_uart_clear_rx(log_uart_t *obj) 
+void log_uart_clear_rx(log_uart_t *obj)
 {
     HAL_LOG_UART_ADAPTER *pUartAdapter=(PHAL_LOG_UART_ADAPTER)&(obj->log_hal_uart);
 
@@ -319,7 +319,7 @@ void log_uart_clear_rx(log_uart_t *obj)
     pUartAdapter->RxCount = 0;
 }
 
-void log_uart_break_set(log_uart_t *obj) 
+void log_uart_break_set(log_uart_t *obj)
 {
     HAL_LOG_UART_ADAPTER *pUartAdapter=(PHAL_LOG_UART_ADAPTER)&(obj->log_hal_uart);
     u32 RegValue;
@@ -329,7 +329,7 @@ void log_uart_break_set(log_uart_t *obj)
     HAL_UART_WRITE32(UART_LINE_CTL_REG_OFF, RegValue);
 }
 
-void log_uart_break_clear(log_uart_t *obj) 
+void log_uart_break_clear(log_uart_t *obj)
 {
     HAL_LOG_UART_ADAPTER *pUartAdapter=(PHAL_LOG_UART_ADAPTER)&(obj->log_hal_uart);
     u32 RegValue;
@@ -339,7 +339,7 @@ void log_uart_break_clear(log_uart_t *obj)
     HAL_UART_WRITE32(UART_LINE_CTL_REG_OFF, RegValue);
 }
 
-void log_uart_tx_comp_handler(log_uart_t *obj, void *handler, uint32_t id) 
+void log_uart_tx_comp_handler(log_uart_t *obj, void *handler, uint32_t id)
 {
     HAL_LOG_UART_ADAPTER *pUartAdapter=(PHAL_LOG_UART_ADAPTER)&(obj->log_hal_uart);
 
@@ -347,7 +347,7 @@ void log_uart_tx_comp_handler(log_uart_t *obj, void *handler, uint32_t id)
     pUartAdapter->TxCompCbPara = (void*)id;
 }
 
-void log_uart_rx_comp_handler(log_uart_t *obj, void *handler, uint32_t id) 
+void log_uart_rx_comp_handler(log_uart_t *obj, void *handler, uint32_t id)
 {
     HAL_LOG_UART_ADAPTER *pUartAdapter=&(obj->log_hal_uart);
 
@@ -355,7 +355,7 @@ void log_uart_rx_comp_handler(log_uart_t *obj, void *handler, uint32_t id)
     pUartAdapter->RxCompCbPara = (void*)id;
 }
 
-void log_uart_line_status_handler(log_uart_t *obj, void *handler, uint32_t id) 
+void log_uart_line_status_handler(log_uart_t *obj, void *handler, uint32_t id)
 {
     HAL_LOG_UART_ADAPTER *pUartAdapter=&(obj->log_hal_uart);
 
@@ -415,7 +415,7 @@ int32_t log_uart_recv_stream_timeout (log_uart_t *obj, char *prxbuf, uint32_t le
 
     task_yield = NULL;
     ret = (int)HalLogUartIntRecv(pUartAdapter, (u8*)prxbuf, len);
-    
+
     if ((ret == HAL_OK) && (timeout_ms > 0)) {
         TimeoutCount = (timeout_ms*1000/TIMER_TICK_US);
         StartCount = HalTimerOp.HalTimerReadCount(1);
@@ -462,14 +462,14 @@ int32_t log_uart_recv_stream_abort (log_uart_t *obj)
 void log_uart_disable (log_uart_t *obj)
 {
     HAL_LOG_UART_ADAPTER *pUartAdapter=&(obj->log_hal_uart);
-    
+
     HalLogUartDisable(pUartAdapter);
 }
 
 void log_uart_enable (log_uart_t *obj)
 {
     HAL_LOG_UART_ADAPTER *pUartAdapter=&(obj->log_hal_uart);
-    
+
     HalLogUartEnable(pUartAdapter);
 }
 
@@ -482,7 +482,7 @@ void log_uart_enable (log_uart_t *obj)
 // Bit 5: TX FIFO empty (THR empty)
 // Bit 6: TX FIFO empty (THR & TSR both empty)
 // Bit 7: Receiver FIFO Error (parity error, framing error or break indication)
-uint8_t log_uart_raed_lsr(log_uart_t *obj) 
+uint8_t log_uart_raed_lsr(log_uart_t *obj)
 {
     uint8_t LineStatus;
 
@@ -496,14 +496,14 @@ uint8_t log_uart_raed_lsr(log_uart_t *obj)
 // Bit 1: DDSR, The DSR line has changed its state
 // Bit 2: TERI, RI line has changed its state from low to high state
 // Bit 3: DDCD, DCD line has changed its state
-// Bit 4: Complement of the CTS input 
-// Bit 5: Complement of the DSR input 
-// Bit 6: Complement of the RI input 
-// Bit 7: Complement of the DCD input 
-uint8_t log_uart_raed_msr(log_uart_t *obj) 
+// Bit 4: Complement of the CTS input
+// Bit 5: Complement of the DSR input
+// Bit 6: Complement of the RI input
+// Bit 7: Complement of the DCD input
+uint8_t log_uart_raed_msr(log_uart_t *obj)
 {
     uint8_t RegValue;
-    
+
     RegValue = HAL_UART_READ8(UART_MODEM_STATUS_REG_OFF);
     return RegValue;
 }

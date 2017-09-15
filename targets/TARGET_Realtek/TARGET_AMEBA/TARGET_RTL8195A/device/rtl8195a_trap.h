@@ -35,7 +35,6 @@ extern uint8_t * __ram_table_start__;
 extern __longcall void HalWdgIntrHandle(void);
 extern __longcall void HalHardFaultHandler(u32);
 
-
 #define __TRAP_Init                 VectorTableInitForOSRtl8195A
 #define __TRAP_SetVector            VectorTableInitRtl8195A
 #define __TRAP_HardFaultHandler     HalHardFaultHandler
@@ -81,4 +80,3 @@ static inline void INTR_WatchdogHandler(void)
 }
 
 #endif
-

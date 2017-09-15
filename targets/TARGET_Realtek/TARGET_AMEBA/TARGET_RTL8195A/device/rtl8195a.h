@@ -46,8 +46,6 @@
 #include "rtl8195a_compiler.h"
 #include "rtl8195a_platform.h"
 
-
-
 #define REG32(reg)      (*(volatile uint32_t *)(reg))
 #define REG16(reg)      (*(volatile uint16_t *)(reg))
 #define REG08(reg)      (*(volatile uint8_t  *)(reg))
@@ -73,7 +71,7 @@
 #define __RTK_CLRBIT(A,V)          (REG32(A) &= ~V)
 #define __RTK_SETMSK(A,M,V)        (REG32(A) = ((REG32(A) & (~M)) | V))
 
-#define PERI_BASE	0x40000000
+#define PERI_BASE    0x40000000
 
 #define __BUILD_MACRO(name,ctrl)                                 \
 static inline uint32_t                                           \
@@ -122,16 +120,10 @@ __##name##_SETMSK(uint32_t addr, uint32_t msk, uint32_t val)     \
     __RTK_SETMSK(ctrl##_BASE+addr,msk,val);                      \
 }                                                                \
 
-//__BUILD_MACRO(RTK_CTRL, CTRL)
-//__BUILD_MACRO(RTK_PERI, PERI)
-//__BUILD_MACRO(RTK_VENDOR, VENDOR)
-//__BUILD_MACRO(RTK_SDRC, SDRC)
-
 __BUILD_MACRO(RTK_CTRL, SYSTEM_CTRL)
 __BUILD_MACRO(RTK_PERI, PERI)
 __BUILD_MACRO(RTK_SDRC, SDR_CTRL)
 __BUILD_MACRO(RTK_VENDOR, VENDOR_REG)
-
 
 #define __BUILD_FCTRL_MACRO(name,ctrl)                           \
 static inline void                                               \
@@ -146,8 +138,6 @@ __##name##_Disable(void)                                         \
     __RTK_PERI_CLRBIT(ctrl, BIT_FCTRL_##name);                   \
 }
 
-
-
 #include "rtl8195a_trap.h"
 #include "rtl8195a_clk.h"
 #include "rtl8195a_misc.h"
@@ -155,11 +145,9 @@ __##name##_Disable(void)                                         \
 
 #endif
 
-
 /* ----------------------------------------------------------------------------
    -- Cortex M3 Core Configuration
    ---------------------------------------------------------------------------- */
-
 /*!
  * @addtogroup Cortex_Core_Configuration Cortex M0 Core Configuration
  * @{
@@ -228,30 +216,11 @@ __##name##_Disable(void)                                         \
 #ifdef CONFIG_SPIC_EN
 #endif
 
-#ifdef CONFIG_SDIO_DEVICE_EN
-//#include "hal_sdio.h"
-#endif
-
-#ifdef CONFIG_NFC_EN
-//#include "hal_nfc.h"
-//#include "rtl8195a_nfc.h"
-#endif
-
 #ifdef CONFIG_WDG
 #include "rtl8195a_wdt.h"
 #endif
 
-#ifdef CONFIG_USB_EN
-//#include "hal_usb.h"
-//#include "rtl8195a_usb.h"
-#endif
-
 #include "hal_log_uart.h"
-
-#ifdef CONFIG_MII_EN
-//#include "hal_mii.h"
-//#include "rtl8195a_mii.h"
-#endif
 
 // firmware information, located at the header of Image2
 #define FW_VERSION          (0x0100)
@@ -264,13 +233,13 @@ __##name##_Disable(void)                                         \
 #define FW_INFO_RSV3        (0x00)          // the firmware information reserved
 #define FW_INFO_RSV4        (0x00)          // the firmware information reserved
 
-#define FLASH_RESERVED_DATA_BASE		0x8000  // reserve 32K for Image1
-#define FLASH_SYSTEM_DATA_ADDR			0x9000  // reserve 32K+4K for Image1 + Reserved data
+#define FLASH_RESERVED_DATA_BASE        0x8000  // reserve 32K for Image1
+#define FLASH_SYSTEM_DATA_ADDR          0x9000  // reserve 32K+4K for Image1 + Reserved data
 // Flash Map for Calibration data
-#define FLASH_CAL_DATA_BASE				0xA000
-#define FLASH_CAL_DATA_ADDR(_offset)	(FLASH_CAL_DATA_BASE + _offset)
-#define FLASH_CAL_DATA_SIZE				0x1000
-#define FLASH_SECTOR_SIZE				0x1000
+#define FLASH_CAL_DATA_BASE             0xA000
+#define FLASH_CAL_DATA_ADDR(_offset)    (FLASH_CAL_DATA_BASE + _offset)
+#define FLASH_CAL_DATA_SIZE             0x1000
+#define FLASH_SECTOR_SIZE               0x1000
 // SPIC Calibration Data
 #define FLASH_SPIC_PARA_OFFSET          0x80
 #define FLASH_SPIC_PARA_BASE            (FLASH_SYSTEM_DATA_ADDR+FLASH_SPIC_PARA_OFFSET)
