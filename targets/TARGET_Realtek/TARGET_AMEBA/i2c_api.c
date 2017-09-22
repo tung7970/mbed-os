@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#include <string.h>
+
 #include "objects.h"
 #include "PinNames.h"
 #include "hal_i2c.h"
@@ -456,7 +458,6 @@ void i2c_slave_address(i2c_t *obj, int idx, uint32_t address, uint32_t mask)
     pSalI2CHND = &(pSalI2CMngtAdpt->pSalHndPriv->SalI2CHndPriv);
     address = (address & 0xFE ) >>1;
 
-    uint16_t i2c_default_addr = (uint16_t) pSalI2CHND->I2CAckAddr;
     uint16_t i2c_user_addr = (uint16_t) address;
 
     if (i2c_target_addr[pSalI2CHND->DevNum] != i2c_user_addr) {

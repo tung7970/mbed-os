@@ -24,86 +24,101 @@
 
 extern u32 SSI_DBG_CONFIG;
 
-
-#define SSI_DBG_ENTRANCE(...)  do {\
-    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_ENTRANCE)) \
+#define SSI_DBG_ENTRANCE(...) do {                                                    \
+    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_ENTRANCE)) {                               \
         DBG_SSI_INFO(IDENT_FOUR_SPACE ANSI_COLOR_GREEN __VA_ARGS__ ANSI_COLOR_RESET); \
-}while(0)
+    }                                                                                 \
+} while(0)
 
-#define SSI_DBG_INIT(...)  do {\
-    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_INIT)) \
-        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__); \
-}while(0)
+#define SSI_DBG_INIT(...) do {                           \
+    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_INIT)) {      \
+        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__);      \
+    }                                                    \
+} while(0)
 
-#define SSI_DBG_INIT_V(...)  do {\
-    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_INIT_V)) \
-        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__); \
-}while(0)
+#define SSI_DBG_INIT_V(...) do {                         \
+    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_INIT_V)) {    \
+        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__);      \
+    }                                                    \
+} while(0)
 
-#define SSI_DBG_INIT_VV(...)  do {\
-    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_INIT_VV)) \
-        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__); \
-}while(0)
+#define SSI_DBG_INIT_VV(...) do {                        \
+    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_INIT_VV)) {   \
+        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__);      \
+    }                                                    \
+} while(0)
 
-#define SSI_DBG_PINMUX(...)  do {\
-    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_PINMUX)) \
-        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__); \
-}while(0)
+#define SSI_DBG_PINMUX(...) do {                         \
+    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_PINMUX)) {    \
+        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__);      \
+    }                                                    \
+} while(0)
 
-#define SSI_DBG_ENDIS(...)  do {\
-    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_ENDIS)) \
-        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__); \
-}while(0)
+#define SSI_DBG_ENDIS(...) do {                          \
+    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_ENDIS))       \
+        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__);      \
+    }                                                    \
+} while(0)
 
-#define SSI_DBG_INT(...)  do {\
-    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_INT)) \
-        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__); \
-}while(0)
+#define SSI_DBG_INT(...) do {                            \
+    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_INT)) {       \
+        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__);      \
+    }                                                    \
+} while(0)
 
-#define SSI_DBG_INT_V(...)  do {\
-    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_INT_V)) \
-        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__); \
-}while(0)
+#define SSI_DBG_INT_V(...) do {                          \
+    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_INT_V)) {     \
+        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__);      \
+    }                                                    \
+} while(0)
 
-#define SSI_DBG_INT_HNDLR(...)  do {\
-    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_INT_HNDLR)) \
-        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__); \
-}while(0)
+#define SSI_DBG_INT_HNDLR(...) do {                      \
+    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_INT_HNDLR)) { \
+        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__);      \
+    }                                                    \
+} while(0)
 
-#define SSI_DBG_INT_READ(...)  do {\
-    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_INT_READ)) \
-        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__); \
-}while(0)
+#define SSI_DBG_INT_READ(...) do {                       \
+    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_INT_READ)) {  \
+        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__);      \
+    }                                                    \
+} while(0)
 
-#define SSI_DBG_INT_WRITE(...)  do {\
-    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_INT_WRITE)) \
-        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__); \
-}while(0)
+#define SSI_DBG_INT_WRITE(...) do {                      \
+    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_INT_WRITE)) { \
+        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__);      \
+    }                                                    \
+} while(0)
 
-#define SSI_DBG_STATUS(...)  do {\
-    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_STATUS)) \
-        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__); \
-}while(0)
+#define SSI_DBG_STATUS(...)  do {                        \
+    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_STATUS))      \
+        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__);      \
+    }                                                    \
+} while(0)
 
-#define SSI_DBG_FIFO(...)  do {\
-    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_FIFO)) \
-        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__); \
-}while(0)
+#define SSI_DBG_FIFO(...) do {                           \
+    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_FIFO)) {      \
+        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__);      \
+    }                                                    \
+} while(0)
 
-#define SSI_DBG_READ(...)  do {\
-    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_READ)) \
-        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__); \
-}while(0)
+#define SSI_DBG_READ(...)  do {                          \
+    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_READ)) {      \
+        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__);      \
+    }                                                    \
+} while(0)
 
-#define SSI_DBG_WRITE(...)  do {\
-    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_WRITE)) \
-        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__); \
-}while(0)
+#define SSI_DBG_WRITE(...)  do {                         \
+    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_WRITE)) {     \
+        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__);      \
+    }                                                    \
+} while(0)
 
-#define SSI_DBG_SLV_CTRL(...)  do {\
-    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_SLV_CTRL)) \
-        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__); \
-}while(0)
+#define SSI_DBG_SLV_CTRL(...)  do {                      \
+    if (unlikely(SSI_DBG_CONFIG & DBG_TYPE_SLV_CTRL)) {  \
+        DBG_SSI_INFO(IDENT_FOUR_SPACE __VA_ARGS__);      \
+    }                                                    \
+} while(0)
 
 enum _SSI_DBG_TYPE_LIST_ {
     DBG_TYPE_ENTRANCE  = 1 << 0,
@@ -146,7 +161,7 @@ typedef struct _HAL_SSI_DMA_MULTIBLK_ {
 } SSI_DMA_MULTIBLK, *PSSI_DMA_MULTIBLK;
 #endif
 /**
- * DesignWare SSI Configurations
+ *DesignWare SSI Configurations
  */
 typedef struct _HAL_SSI_ADAPTOR_ {
     SSI_DMA_CONFIG DmaConfig;

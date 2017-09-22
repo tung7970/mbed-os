@@ -16,7 +16,6 @@
 #define _HAL_DAC_H_
 
 #include "rtl8195a.h"
-#include "rtl8195a_dac.h"
 #include "hal_api.h"
 #include "hal_gdma.h"
 

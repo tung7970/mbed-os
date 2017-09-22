@@ -110,7 +110,7 @@ static struct eth_buffer eth_buffer;
 #ifdef CONFIG_PROMISC
 #define MAX_PACKET_FILTER_INFO 5
 #define FILTER_ID_INIT_VALUE 10
-rtw_packet_filter_info_t paff_array[MAX_PACKET_FILTER_INFO]={0, 0, 0, 0, 0};
+rtw_packet_filter_info_t paff_array[MAX_PACKET_FILTER_INFO]={{0}, {0}, {0}, {0}, {0}};
 static u8 packet_filter_enable_num = 0;
 
 void promisc_init_packet_filter()
@@ -274,7 +274,7 @@ struct eth_frame* retrieve_frame(void)
 	return frame;
 }
 
-static void promisc_test(int duration, unsigned char len_used)
+static void promisc_test(unsigned int duration, unsigned char len_used)
 {
 	int ch;
 	unsigned int start_time;
@@ -380,7 +380,7 @@ static void promisc_callback_all(unsigned char *buf, unsigned int len, void* use
 		rtw_exit_critical(&lock, &irqL);
 	}
 }
-static void promisc_test_all(int duration, unsigned char len_used)
+static void promisc_test_all(unsigned int duration, unsigned char len_used)
 {
 	int ch;
 	unsigned int start_time;

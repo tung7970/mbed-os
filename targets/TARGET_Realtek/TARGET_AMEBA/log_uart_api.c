@@ -253,23 +253,18 @@ void log_uart_irq_set(log_uart_t *obj, LOG_UART_INT_ID irq, uint32_t enable)
 
 char log_uart_getc(log_uart_t *obj)
 {
-    HAL_LOG_UART_ADAPTER *pUartAdapter=(PHAL_LOG_UART_ADAPTER)&(obj->log_hal_uart);
-
     while (!log_uart_readable(obj));
     return (char)(HAL_UART_READ32(UART_REV_BUF_OFF) & 0xFF);
 }
 
 void log_uart_putc(log_uart_t *obj, char c)
 {
-    HAL_LOG_UART_ADAPTER *pUartAdapter=(PHAL_LOG_UART_ADAPTER)&(obj->log_hal_uart);
-
     while (!log_uart_writable(obj));
     HAL_UART_WRITE8(UART_TRAN_HOLD_OFF, c);
 }
 
 int log_uart_readable(log_uart_t *obj)
 {
-    HAL_LOG_UART_ADAPTER *pUartAdapter=(PHAL_LOG_UART_ADAPTER)&(obj->log_hal_uart);
     volatile u8 line_status;
 
     line_status = HAL_UART_READ8(UART_LINE_STATUS_REG_OFF);
@@ -283,7 +278,6 @@ int log_uart_readable(log_uart_t *obj)
 
 int log_uart_writable(log_uart_t *obj)
 {
-    HAL_LOG_UART_ADAPTER *pUartAdapter=(PHAL_LOG_UART_ADAPTER)&(obj->log_hal_uart);
     volatile u8 line_status;
 
     line_status = HAL_UART_READ8(UART_LINE_STATUS_REG_OFF);
@@ -321,7 +315,6 @@ void log_uart_clear_rx(log_uart_t *obj)
 
 void log_uart_break_set(log_uart_t *obj)
 {
-    HAL_LOG_UART_ADAPTER *pUartAdapter=(PHAL_LOG_UART_ADAPTER)&(obj->log_hal_uart);
     u32 RegValue;
 
     RegValue = HAL_UART_READ32(UART_LINE_CTL_REG_OFF);
@@ -331,7 +324,6 @@ void log_uart_break_set(log_uart_t *obj)
 
 void log_uart_break_clear(log_uart_t *obj)
 {
-    HAL_LOG_UART_ADAPTER *pUartAdapter=(PHAL_LOG_UART_ADAPTER)&(obj->log_hal_uart);
     u32 RegValue;
 
     RegValue = HAL_UART_READ32(UART_LINE_CTL_REG_OFF);

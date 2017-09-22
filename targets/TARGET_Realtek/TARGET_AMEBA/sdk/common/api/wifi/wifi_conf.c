@@ -324,7 +324,8 @@ static void wifi_disconn_hdl( char* buf, int buf_len, int flags, void* userdata)
             else if (rtw_join_status == 0)
                  error_flag = RTW_CONNECT_FAIL;
 
-            else if (rtw_join_status ==JOIN_COMPLETE | JOIN_SECURITY_COMPLETE | JOIN_ASSOCIATED | JOIN_AUTHENTICATED | JOIN_LINK_READY)
+            else if (rtw_join_status == (JOIN_COMPLETE | JOIN_SECURITY_COMPLETE |
+                                         JOIN_ASSOCIATED | JOIN_AUTHENTICATED | JOIN_LINK_READY))
                 error_flag = RTW_WRONG_PASSWORD;    
         }
         
@@ -442,17 +443,17 @@ int wifi_connect(
         } else {
 
             if (password_len == 10) {
-
-                u32 p[5] = {0};
+                unsigned int p[5] = {0};
                 u8 i = 0; 
-                sscanf((const char*)password, "%02x%02x%02x%02x%02x", &p[0], &p[1], &p[2], &p[3], &p[4]);
+                sscanf((const char*)password, "%02x%02x%02x%02x%02x",
+                       &p[0], &p[1], &p[2], &p[3], &p[4]);
                 for(i=0; i< 5; i++)
                     wep_pwd[i] = (u8)p[i];
                 wep_pwd[5] = '\0';
                 password_len = 5;
                 wep_hex = 1;
             } else if (password_len == 26) {
-                u32 p[13] = {0};
+                unsigned int p[13] = {0};
                 u8 i = 0;
                 sscanf((const char*)password, "%02x%02x%02x%02x%02x%02x%02x"\
                      "%02x%02x%02x%02x%02x%02x", &p[0], &p[1], &p[2], &p[3], &p[4],\
@@ -796,7 +797,7 @@ int wifi_get_ap_info(rtw_bss_info_t * ap_info, rtw_security_t *security)
 
     snprintf(buf, 24, "get_security");
     ret = wext_private_command_with_retval(ifname, buf, buf, 24);
-    sscanf(buf, "%d", security);
+    sscanf(buf, "%lu", security);
 
     return ret;
 }
@@ -1297,7 +1298,7 @@ int wifi_scan_networks_with_ssid(int (results_handler)(char*buf, int buflen, cha
     memcpy(scan_buf.buf+sizeof(int), ssid, ssid_len);
 
     //Scan channel    
-    if (scan_cnt = (wifi_scan(RTW_SCAN_TYPE_ACTIVE, RTW_BSS_TYPE_ANY, &scan_buf)) < 0) {
+    if ((scan_cnt = wifi_scan(RTW_SCAN_TYPE_ACTIVE, RTW_BSS_TYPE_ANY, &scan_buf)) < 0) {
         WIFI_CONF_MSG("\n\rERROR: wifi scan failed");
         ret = RTW_ERROR;
     } else {
@@ -1359,7 +1360,7 @@ int wifi_scan_networks_with_ssid(int (results_handler)(char*buf, int buflen, cha
         results_handler(scan_buf.buf, scan_buf.buf_len, ssid, user_data);
         
     if (scan_buf.buf)
-        rtw_mfree(scan_buf.buf, scan_buf.buf_len);
+        rtw_mfree((u8 *)scan_buf.buf, scan_buf.buf_len);
 
     return ret;
 }

@@ -57,13 +57,22 @@ static uint8_t wlan_get_hwaddr_size(emac_interface_t *emac)
 static void wlan_get_hwaddr(emac_interface_t *emac, uint8_t *addr)
 {
     char mac[20];
+    int dec[6];
+
     if (RTW_SUCCESS == wifi_get_mac_address(mac)) {
         if (sscanf(mac, "%x:%x:%x:%x:%x:%x",
-                   &addr[0], &addr[1], &addr[2], &addr[3], &addr[4], &addr[5]) != 6)
+                   &dec[0], &dec[1], &dec[2], &dec[3], &dec[4], &dec[5]) != 6)
             printf("Get HW address failed\r\n");
     } else {
         printf("Get HW address failed\r\n");
     }
+
+    addr[0] = (uint8_t)dec[0];
+    addr[1] = (uint8_t)dec[1];
+    addr[2] = (uint8_t)dec[2];
+    addr[3] = (uint8_t)dec[3];
+    addr[4] = (uint8_t)dec[4];
+    addr[5] = (uint8_t)dec[5];
 }
 
 static void wlan_set_hwaddr(emac_interface_t *emac, uint8_t *addr)
@@ -194,15 +203,23 @@ void mbed_default_mac_address(char *mac) {
 void mbed_mac_address(char *mac)
 {
     char hwaddr[20];
+    int dec[6];
 
     if (RTW_SUCCESS == wifi_get_mac_address(hwaddr)) {
         if (sscanf(hwaddr, "%x:%x:%x:%x:%x:%x",
-                   &mac[0], &mac[1], &mac[2], &mac[3], &mac[4], &mac[5]) != 6)
+                   &dec[0], &dec[1], &dec[2], &dec[3], &dec[4], &dec[5]) != 6)
             printf("Get HW address failed\r\n");
     } else {
         printf("Get HW address failed\r\n");
         mbed_default_mac_address(mac);
     }
+
+    mac[0] = (char)dec[0];
+    mac[1] = (char)dec[1];
+    mac[2] = (char)dec[2];
+    mac[3] = (char)dec[3];
+    mac[4] = (char)dec[4];
+    mac[5] = (char)dec[5];
 }
 
 void wlan_emac_link_change(bool up)

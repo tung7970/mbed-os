@@ -20,6 +20,7 @@
 #include "PinNames.h"
 #include "pinmap.h"
 #include "hal_ssi.h"
+#include "cmsis_os2.h"
 
 extern u32 SystemGetCpuClk(VOID);
 extern VOID HAL_GPIO_PullCtrl(u32 pin, u32 mode);
@@ -27,7 +28,6 @@ extern VOID HAL_GPIO_PullCtrl(u32 pin, u32 mode);
 void spi_tx_done_callback(VOID *obj);
 void spi_rx_done_callback(VOID *obj);
 void spi_bus_tx_done_callback(VOID *obj);
-
 
 //TODO: Load default Setting: It should be loaded from external setting file.
 extern const DW_SSI_DEFAULT_SETTING SpiDefaultSetting;
@@ -68,13 +68,11 @@ void spi_init (spi_t *obj, PinName mosi, PinName miso, PinName sclk, PinName sse
 
     _memset((void*)obj, 0, sizeof(spi_t));
     obj->state = 0;
-    uint32_t SystemClock = SystemGetCpuClk();
-    uint32_t MaxSsiFreq  = (SystemClock >> 2) >> 1;
 
     /* SsiClockDivider doesn't support odd number */
 
-    DBG_SSI_INFO("SystemClock: %d\n", SystemClock);
-    DBG_SSI_INFO("MaxSsiFreq : %d\n", MaxSsiFreq);
+    DBG_SSI_INFO("SystemClock: %d\n", SystemGetCpuClk());
+    DBG_SSI_INFO("MaxSsiFreq : %d\n", (SystemGetCpuClk() >> 2) >> 1);
 
     ssi_mosi = pinmap_peripheral(mosi, PinMap_SSI_MOSI);
     ssi_miso = pinmap_peripheral(miso, PinMap_SSI_MISO);

@@ -155,12 +155,12 @@ static uint8_t check_client_request_ip(ip_addr_t *client_req_ip, uint8_t *hwaddr
 	if(i == DHCP_POOL_END+1)
 		ip_addr4 = 0;
 
-Exit:
 	return ip_addr4;
 }
+
+#if (debug_dhcps)	
 static void dump_client_table()
 {
-#if 0
 	int i;
 	uint8_t *p = NULL;
 	printf("\r\nip_range: %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x %2.2x", 
@@ -173,8 +173,8 @@ static void dump_client_table()
 			i, p[0], p[1], p[2], p[3], p[4], p[5]);
 	}
 	printf("\r\n");
-#endif	
 }
+#endif	
 #endif //CONFIG_DHCPS_KEPT_CLIENT_INFO
 #endif
 

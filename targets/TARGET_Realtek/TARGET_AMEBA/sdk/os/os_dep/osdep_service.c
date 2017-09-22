@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 #include <osdep_service.h>
+#include "tcm_heap.h"
 #define OSDEP_DBG(x, ...) do {} while(0)
 
 extern struct osdep_service_ops osdep_service;
@@ -60,9 +61,9 @@ int RTW_STATUS_CODE(int error_code)
 u32 rtw_atoi(u8* s)
 {
     int num = 0, flag = 0;
-    int i;
+    size_t i;
 
-    for (i = 0;i<=strlen((char *)s);i++) {
+    for (i = 0; i<= strlen((char *)s); i++) {
         if (s[i] >= '0' && s[i] <= '9')
             num = num * 10 + s[i] -'0';
         else if (s[0] == '-' && i==0)
@@ -210,10 +211,11 @@ void add_mem_usage(_list *pmem_table, void *ptr, int size, int *used_num, int fl
 		size, free_heap_size);
         return;
     } else {
-        if (flag == MEM_MONITOR_FLAG_WPAS)
+        if (flag == MEM_MONITOR_FLAG_WPAS) {
             DBG_INFO("Alloc memory at %p with size of %d", ptr, size);
-        else
+        } else {
             DBG_INFO("Alloc memory at %p with size of %d", ptr, size);
+	}
     }
 
 #if CONFIG_MEM_MONITOR & MEM_MONITOR_LEAK
@@ -1030,7 +1032,7 @@ static void worker_thread_main( void *arg )
         if (rtw_pop_from_xqueue(&worker_thread->event_queue, &msg, RTW_WAIT_FOREVER) == SUCCESS) {
             msg.function(msg.buf, msg.buf_len, msg.flags, msg.user_data);
             if (msg.buf){
-                _rtw_mfree(msg.buf, msg.buf_len);
+                _rtw_mfree((u8 *)msg.buf, msg.buf_len);
             }
         }
     }

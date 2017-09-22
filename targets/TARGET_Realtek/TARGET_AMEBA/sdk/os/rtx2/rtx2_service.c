@@ -519,7 +519,7 @@ _func_enter_;
 
     if (*queue != NULL) {
         mbox = (rtx_mbox_t *)(*queue);
-        if (osMessageQueuePut(mbox->id, message, NULL, timeout_ms) != osOK ) {
+        if (osMessageQueuePut(mbox->id, message, 0, timeout_ms) != osOK ) {
             DBG_ERR("%s error\n", __FUNCTION__);
             return _FAIL;
         }
@@ -873,7 +873,7 @@ _func_enter_;
     if (tmr == NULL)
         goto err_exit;
 
-    tmr->attr.name = pcTimerName;
+    tmr->attr.name = (char *)pcTimerName;
     tmr->attr.cb_mem = (void *)&tmr->data;
     tmr->attr.cb_size = sizeof(tmr->data);
     if (pvTimerID == NULL)

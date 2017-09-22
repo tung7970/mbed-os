@@ -18,7 +18,7 @@
 
 #if CONFIG_DAC_EN
 
-#include "cmsis.h"
+#include "cmsis_os2.h"
 #include "pinmap.h"
 #include <string.h>
 

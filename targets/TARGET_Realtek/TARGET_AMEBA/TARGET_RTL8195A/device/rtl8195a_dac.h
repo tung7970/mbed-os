@@ -15,6 +15,8 @@
 #ifndef _RTL8195A_DAC_H_
 #define _RTL8195A_DAC_H_
 
+#include "hal_dac.h"
+
 //================ Register Bit Field ==========================
 //2 REG_DAC0_FIFO_WR
 
@@ -304,5 +306,8 @@ RTK_STATUS HalDACEnableRtl8195a(void *Data);
 RTK_STATUS HalDACIntrCtrl8195a(void *Data);
 u8 HalDACSendRtl8195a(void *Data);
 u32 HalDACReadRegRtl8195a(void *Data, u8 I2CReg);
+
+RTK_STATUS HalDACPinMuxInit(PHAL_DAC_INIT_DAT dac);
+RTK_STATUS HalDACPinMuxDeInit(PHAL_DAC_INIT_DAT dac);
 
 #endif

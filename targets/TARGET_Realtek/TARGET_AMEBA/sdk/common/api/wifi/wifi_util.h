@@ -84,6 +84,12 @@ int wext_send_mgnt(const char *ifname, char *buf, __u16 buf_len, __u16 flags);
 int wext_send_eapol(const char *ifname, char *buf, __u16 buf_len, __u16 flags);
 int wext_set_gen_ie(const char *ifname, char *buf, __u16 buf_len, __u16 flags);
 
+int wext_enable_forwarding(const char *ifname);
+int wext_disable_forwarding(const char *ifname);
+int wext_set_ch_deauth(const char *ifname, __u8 enable);
+int wext_set_bssid(const char *ifname, const __u8 *bssid);
+int wext_get_drv_ability(const char *ifname, __u32 *ability);
+
 #ifdef	__cplusplus
 }
 #endif

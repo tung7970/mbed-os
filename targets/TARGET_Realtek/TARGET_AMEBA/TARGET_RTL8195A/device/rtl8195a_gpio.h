@@ -219,4 +219,6 @@ static __inline VOID HAL_GPIO_UnMaskIrq(HAL_GPIO_PIN *GPIO_Pin)
     HAL_GPIO_UnMaskIrq_8195a(GPIO_Pin);
 }
 
+#define HAL_GPIO_DeInit  HAL_GPIO_DeInit_8195a
+
 #endif  // end of "#define _RTL8195A_GPIO_H_"

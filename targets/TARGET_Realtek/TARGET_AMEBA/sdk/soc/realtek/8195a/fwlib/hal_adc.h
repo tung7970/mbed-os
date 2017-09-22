@@ -17,7 +17,6 @@
 #define _HAL_ADC_H_
 
 #include "rtl8195a.h"
-#include "rtl8195a_adc.h"
 #include "hal_gdma.h"
 
 //================ ADC Configuration  =========================
