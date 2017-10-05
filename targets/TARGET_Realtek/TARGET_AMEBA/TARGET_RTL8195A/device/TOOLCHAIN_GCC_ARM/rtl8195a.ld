@@ -19,10 +19,9 @@ INCLUDE "rtl8195a_rom.h"
    But we can put .data/.bss of Image2 in this region */
 MEMORY
 {
-  TCM (rwx)        : ORIGIN = 0x1FFF0000, LENGTH = 0x00010000
-  DATA_RAM (rwx)   : ORIGIN = 0x10002100, LENGTH = 0x10007000 - 0x10002100
-  SRAM1 (rwx)      : ORIGIN = 0x10007000, LENGTH = 0x10070000 - 0x10007000
-  SRAM2 (rwx)      : ORIGIN = 0x30000000, LENGTH = 2M
+  SRAM (rwx)  : ORIGIN = 0x10007000, LENGTH = 0x10070000 - 0x10007000
+  DTCM (rw)   : ORIGIN = 0x1FFF0000, LENGTH = 0x00010000
+  DRAM (rwx)  : ORIGIN = 0x30000000, LENGTH = 2M
 }
 
 /* Stack sizes: */
@@ -62,17 +61,17 @@ SECTIONS
     {
         KEEP(*(SORT(.image2.ram.data*)))
         KEEP(*(.image2.validate.rodata*))
-    } > SRAM2
+    } > DRAM
 
-    .text.sram1 :
+    .text.sram :
     {
         . = ALIGN(4);
         *rtl8195a_crypto.o (.text* .rodata*)
         *mbedtls*.o (.text* .rodata*)
         *libc.a: (.text* .rodata*)
-    } > SRAM1
+    } > SRAM
 
-    .text.sram2 :
+    .text.dram :
     {
         . = ALIGN(4);
         *(.mon.ram.text*)
@@ -101,26 +100,29 @@ SECTIONS
         *(.rodata*)
 
         KEEP(*(.eh_frame*))
-    } > SRAM2
+    } > DRAM
     __etext = .;
 
     __data_start__ = .;
 
-    .data.sram1 :
+    .data.sram :
     {
         . = ALIGN(4);
         __sram_data_start__ = .;
         *rtl8195a_crypto*.o (.data*)
         *mbedtls*.o (.data*)
+        *(.data.os.*)
+        *(.data.sram*)
         __sram_data_end__ = .;
-    } > SRAM1
+    } > SRAM
 
-    .data.sram2 :
+    .data.dram :
     {
         __sdram_data_start__ = .;
         *(vtable)
         *(.data*)
         *(.sdram.data*)
+        *(.data.dram*)
 
         . = ALIGN(4);
         /* preinit data */
@@ -146,66 +148,67 @@ SECTIONS
 
         __sdram_data_end__ = .;
         /* All data end */
-    } > SRAM2
+    } > DRAM
     __data_end__ = .;
     __image2_end__ = .;
 
     .ARM.extab :
     {
         *(.ARM.extab* .gnu.linkonce.armextab.*)
-    } > SRAM2
+    } > DRAM
 
     __exidx_start = .;
     .ARM.exidx :
     {
         *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-    } > SRAM2
+    } > DRAM
     __exidx_end = .;
 
-    .bss.sram1 (NOLOAD) :
+    .bss.sram (NOLOAD) :
     {
         __bss_sram_start__ = .;
         *rtl8195a_crypto.o (.bss* COMMON)
         *mbedtls*.o (.bss* COMMON)
-        *(.bss.thread_stack_main)
+        *(.bss.os.*)
+        *(.bss.sram*)
         __bss_sram_end__ = .;
-    } > SRAM1
+    } > SRAM
 
-    .bss.sram2 (NOLOAD) :
+    .bss.dram (NOLOAD) :
     {
         __bss_start__ = .;
         __bss_dram_start__ = .;
         *(.bss*)
         *(COMMON)
         *(.bdsram.data*)
+        *(.bss.dram*)
         __bss_dram_end__ = .;
         __bss_end__ = .;
-    } > SRAM2
+    } > DRAM
 
     .bf_data :
     {
         __buffer_data_start__ = .;
         *(.bfsram.data*)
         __buffer_data_end__ = .;
-    } > SRAM2
+    } > DRAM
 
     .heap (NOLOAD):
     {
         __end__ = .;
         end = __end__;
         *(.heap*)
-        . = ORIGIN(SRAM1) + LENGTH(SRAM1) - StackSize;
+        . = ORIGIN(SRAM) + LENGTH(SRAM) - StackSize;
         __HeapLimit = .;
-    } > SRAM1
+    } > SRAM
 
     .TCM_overlay :
     {
         __bss_dtcm_start__ = .;
-        *lwip_mem.o (.bss*)
-        *lwip_memp.o (.bss*)
         *(.tcm.heap*)
+        *(.bss.dtcm*)
         __bss_dtcm_end__ = .;
-    } > TCM
+    } > DTCM
 
     /* .stack_dummy section doesn't contains any symbols. It is only
      * used for linker to calculate size of stack sections, and assign
@@ -215,11 +218,11 @@ SECTIONS
         __StackLimit = .;
         *(.stack)
         . += StackSize - (. - __StackLimit);
-    } > SRAM1
+    } > SRAM
 
     /* Set stack top to end of RAM, and stack limit move down by
      * size of stack_dummy section */
-    __StackTop = ORIGIN(SRAM1) + LENGTH(SRAM1);
+    __StackTop = ORIGIN(SRAM) + LENGTH(SRAM);
     __StackLimit = __StackTop - SIZEOF(.stack_dummy);
     PROVIDE(__stack = __StackTop);
 

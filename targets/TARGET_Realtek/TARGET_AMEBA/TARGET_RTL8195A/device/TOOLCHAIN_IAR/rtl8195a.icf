@@ -177,11 +177,10 @@ define block .bss.sram {
 define block .bss.dram {
     zeroinit,
     section .sdram.bss*,
+    section .bss.dram*,
 };
 
 define block .bss.dtcm {
-    zeroinit object lwip_mem.o,
-    zeroinit object lwip_memp.o,
     section .bss.dtcm*,
 };
 
